@@ -4,10 +4,10 @@ const { list, insert, detail, update, destroy } = require('../controllers/users.
 const router = express.Router()
 
 router
-  .post('/insert', insert)
+  .post('/user', insert)
   .get('/user', list)
   .get('/user/:id', detail)
-  .put('/update/:id', update)
-  .delete('/delete/:id', destroy)
+  .put('/user/:id', update)
+  .delete('/user/:id', destroy)
 
 module.exports = router

@@ -1,9 +1,9 @@
 const db = require('../config/db')
 
 const recipeModel = {
-  insertRecipe: (id, image, title, ingredients, vidio, date, userid) => {
+  insertRecipe: (image, title, ingredients, vidio, date, userID) => {
     return new Promise((resolve, reject) => {
-      db.query('INSERT INTO recipe (id, image, title, ingredients, vidio, date, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [id, image, title, ingredients, vidio, date, userid], (err, result) => {
+      db.query('INSERT INTO recipe (image, title, ingredients, vidio, date, user_id) VALUES ($1, $2, $3, $4, $5, $6)', [image, title, ingredients, vidio, date, userID], (err, result) => {
         if (err) {
           reject(err)
         }
@@ -11,7 +11,7 @@ const recipeModel = {
       })
     })
   },
-  selectAll: () => {
+  allRecipe: () => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM recipe', (err, result) => {
         if (err) {
@@ -21,7 +21,7 @@ const recipeModel = {
       })
     })
   },
-  selectDetail: (id) => {
+  detailRecipe: (id) => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM recipe WHERE id=$1', [id], (err, result) => {
         if (err) {
@@ -31,9 +31,9 @@ const recipeModel = {
       })
     })
   },
-  selectUpdate: (id, image, title, ingredients, vidio, date, userid) => {
+  updateRecipe: (id, image, title, ingredients, vidio, date, userID) => {
     return new Promise((resolve, reject) => {
-      db.query('UPDATE recipe SET image=$2, title=$3, ingredients=$4, vidio=$5, date=$6, user_id=$7 WHERE id=$1', [id, image, title, ingredients, vidio, date, userid], (err, result) => {
+      db.query('UPDATE recipe SET image=$2, title=$3, ingredients=$4, vidio=$5, date=$6, user_id=$7 WHERE id=$1', [id, image, title, ingredients, vidio, date, userID], (err, result) => {
         if (err) {
           reject(err)
         }
@@ -41,7 +41,7 @@ const recipeModel = {
       })
     })
   },
-  selectDelete: (id) => {
+  deleteRecipe: (id) => {
     return new Promise((resolve, reject) => {
       db.query('DELETE FROM recipe WHERE id=$1', [id], (err, result) => {
         if (err) {
@@ -51,7 +51,7 @@ const recipeModel = {
       })
     })
   },
-  selectRelasi: () => {
+  allRelation: () => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM recipe INNER JOIN users ON user_id=users.id', (err, result) => {
         if (err) {
@@ -60,7 +60,38 @@ const recipeModel = {
         resolve(result)
       })
     })
+  },
+  detRelation: (id) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM recipe INNER JOIN users ON user_id=users.id WHERE users.id=$1', [id], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
+  searchRecipe: (title) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT image, title, ingredients, vidio, date FROM recipe WHERE title LIKE '${title}%'`, (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
+  latesRecipe: () => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM recipe ORDER BY date ASC LIMIT 5', (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
   }
+
 }
 
 module.exports = recipeModel

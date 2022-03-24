@@ -2,9 +2,12 @@ const commentModel = require('../models/comment.model')
 
 const commentController = {
   insert: (req, res) => {
-    const { id, recipeID, commentText, userID } = req.body
+    const recipeID = req.body.recipe_id
+    const commentText = req.body.comment_text
+    const userID = req.body.user_id
+
     commentModel
-      .insertComment(id, recipeID, commentText, userID)
+      .insertComment(recipeID, commentText, userID)
       .then((result) => {
         res.json(result)
       })
@@ -35,7 +38,10 @@ const commentController = {
   },
   update: (req, res) => {
     const id = req.params.id
-    const { recipeID, commentText, userID } = req.body
+    const recipeID = req.body.recipe_id
+    const commentText = req.body.comment_text
+    const userID = req.body.user_id
+
     commentModel
       .updateComment(id, recipeID, commentText, userID)
       .then((result) => {
@@ -59,6 +65,17 @@ const commentController = {
   relation: (req, res) => {
     commentModel
       .relationCommnet()
+      .then((result) => {
+        res.json(result.rows)
+      })
+      .catch((err) => {
+        res.json(err)
+      })
+  },
+  detailRelation: (req, res) => {
+    const id = req.params.id
+    commentModel
+      .detRelation(id)
       .then((result) => {
         res.json(result.rows)
       })

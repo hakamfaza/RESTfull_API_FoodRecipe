@@ -1,5 +1,5 @@
 const express = require('express')
-const { insert, list, detail, update, destroy, relation } = require('../controllers/comment.controller')
+const { insert, list, detail, update, destroy, relation, detailRelation } = require('../controllers/comment.controller')
 
 const router = express.Router()
 
@@ -10,5 +10,6 @@ router
   .put('/comment/:id', update)
   .delete('/comment/:id', destroy)
   .get('/comment-relation', relation)
+  .get('/comment-relation/:id', detailRelation)
 
 module.exports = router

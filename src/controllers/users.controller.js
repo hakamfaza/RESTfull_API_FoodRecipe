@@ -3,9 +3,9 @@ const userModel = require('../models/users.model')
 const userController = {
 
   insert: (req, res) => {
-    const { id, name, email, phone, password, images } = req.body
+    const { name, email, phone, password, image } = req.body
     userModel
-      .insertUser(id, name, email, phone, password, images)
+      .insertUser(name, email, phone, password, image)
       .then((result) => {
         res.json(result)
       })
@@ -15,7 +15,7 @@ const userController = {
   },
   list: (req, res) => {
     userModel
-      .selectAll()
+      .allUser()
       .then((result) => {
         res.json(result.rows)
       })
@@ -26,7 +26,7 @@ const userController = {
   detail: (req, res) => {
     const id = req.params.id
     userModel
-      .selectDetail(id)
+      .detailUser(id)
       .then((result) => {
         res.json(result.rows[0])
       })
@@ -38,7 +38,7 @@ const userController = {
     const id = req.params.id
     const { name, email, phone, password, image } = req.body
     userModel
-      .selectUpdate(id, name, email, phone, password, image)
+      .updateUser(id, name, email, phone, password, image)
       .then((result) => {
         res.json(result)
       })
@@ -49,7 +49,7 @@ const userController = {
   destroy: (req, res) => {
     const id = req.params.id
     userModel
-      .selectDestroy(id)
+      .destroyUser(id)
       .then((result) => {
         res.json(result)
       })

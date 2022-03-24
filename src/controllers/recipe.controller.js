@@ -2,9 +2,10 @@ const recipeModel = require('../models/recipe.model')
 
 const recipeController = {
   insert: (req, res) => {
-    const { id, image, title, ingredients, vidio, date, userid } = req.body
+    const userID = req.body.user_id
+    const { image, title, ingredients, vidio, date } = req.body
     recipeModel
-      .insertRecipe(id, image, title, ingredients, vidio, date, userid)
+      .insertRecipe(image, title, ingredients, vidio, date, userID)
       .then((result) => {
         res.json(result)
       })
@@ -14,7 +15,7 @@ const recipeController = {
   },
   list: (req, res) => {
     recipeModel
-      .selectAll()
+      .allRecipe()
       .then((result) => {
         res.json(result.rows)
       })
@@ -25,7 +26,7 @@ const recipeController = {
   detail: (req, res) => {
     const id = req.params.id
     recipeModel
-      .selectDetail(id)
+      .detailRecipe(id)
       .then((result) => {
         res.json(result.rows[0])
       })
@@ -35,9 +36,10 @@ const recipeController = {
   },
   update: (req, res) => {
     const id = req.params.id
-    const { image, title, ingredients, vidio, date, userid } = req.body
+    const { image, title, ingredients, vidio, date } = req.body
+    const userID = req.body.user_id
     recipeModel
-      .selectUpdate(id, image, title, ingredients, vidio, date, userid)
+      .updateRecipe(id, image, title, ingredients, vidio, date, userID)
       .then((result) => {
         res.json(result)
       })
@@ -48,7 +50,7 @@ const recipeController = {
   destroy: (req, res) => {
     const id = req.params.id
     recipeModel
-      .selectDelete(id)
+      .deleteRecipe(id)
       .then((result) => {
         res.json(result)
       })
@@ -56,9 +58,43 @@ const recipeController = {
         res.json(err)
       })
   },
-  relasi: (req, res) => {
+  relation: (req, res) => {
     recipeModel
-      .selectRelasi()
+      .allRelation()
+      .then((result) => {
+        res.json(result.rows)
+      })
+      .catch((err) => {
+        res.json(err)
+      })
+  },
+  detailRelation: (req, res) => {
+    const id = req.params.id
+    recipeModel
+      .detRelation(id)
+      .then((result) => {
+        res.json(result.rows)
+      })
+      .catch((err) => {
+        res.json(err)
+      })
+  },
+  search: (req, res) => {
+    const title = req.query.search
+
+    recipeModel
+      .searchRecipe(title)
+      .then((result) => {
+        res.json(result.rows)
+      })
+      .catch((err) => {
+        res.json(err)
+      })
+  },
+  latest: (req, res) => {
+    // const orderBy = req.query.orderBy
+    recipeModel
+      .latesRecipe()
       .then((result) => {
         res.json(result.rows)
       })

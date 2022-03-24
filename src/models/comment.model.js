@@ -1,9 +1,9 @@
 const db = require('../config/db')
 
 const commentModel = {
-  insertComment: (id, recipeID, commentText, userID) => {
+  insertComment: (recipeID, commentText, userID) => {
     return new Promise((resolve, reject) => {
-      db.query('INSERT INTO comment (id, recipe_id, comment_text, user_id) VALUES ($1, $2, $3, $4)', [id, recipeID, commentText, userID], (err, result) => {
+      db.query('INSERT INTO comment (recipe_id, comment_text, user_id) VALUES ($1, $2, $3)', [recipeID, commentText, userID], (err, result) => {
         if (err) {
           reject(err)
         }
@@ -53,7 +53,17 @@ const commentModel = {
   },
   relationCommnet: () => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM recipe INNER JOIN comment ON recipe_id=comment.id', (err, result) => {
+      db.query('SELECT * FROM comment INNER JOIN recipe ON recipe.id=recipe_id', (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
+  detRelation: (id) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM comment INNER JOIN recipe ON recipe.id=recipe_id WHERE recipe.id=$1', [id], (err, result) => {
         if (err) {
           reject(err)
         }
