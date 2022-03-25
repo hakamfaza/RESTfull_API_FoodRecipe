@@ -92,7 +92,6 @@ const recipeController = {
       })
   },
   latest: (req, res) => {
-    // const orderBy = req.query.orderBy
     recipeModel
       .latesRecipe()
       .then((result) => {

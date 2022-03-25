@@ -73,7 +73,7 @@ const recipeModel = {
   },
   searchRecipe: (title) => {
     return new Promise((resolve, reject) => {
-      db.query(`SELECT image, title, ingredients, vidio, date FROM recipe WHERE title LIKE '${title}%'`, (err, result) => {
+      db.query('SELECT image, title, ingredients, vidio, date FROM recipe WHERE title LIKE $1||\'%\'', [title], (err, result) => {
         if (err) {
           reject(err)
         }
