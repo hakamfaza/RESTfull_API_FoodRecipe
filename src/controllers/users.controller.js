@@ -2,7 +2,7 @@ const userModel = require('../models/users.model')
 
 const userController = {
 
-  insert: (req, res) => {
+  createUser: (req, res) => {
     const { name, email, phone, password, image } = req.body
     userModel
       .insertUser(name, email, phone, password, image)
@@ -13,7 +13,7 @@ const userController = {
         res.json(err)
       })
   },
-  list: (req, res) => {
+  getUser: (req, res) => {
     userModel
       .allUser()
       .then((result) => {
@@ -23,7 +23,7 @@ const userController = {
         res.json(err)
       })
   },
-  detail: (req, res) => {
+  getDetailUser: (req, res) => {
     const id = req.params.id
     userModel
       .detailUser(id)
@@ -34,7 +34,7 @@ const userController = {
         res.json(err)
       })
   },
-  update: (req, res) => {
+  editUser: (req, res) => {
     const id = req.params.id
     const { name, email, phone, password, image } = req.body
     userModel
@@ -46,7 +46,7 @@ const userController = {
         res.json(err)
       })
   },
-  destroy: (req, res) => {
+  delUser: (req, res) => {
     const id = req.params.id
     userModel
       .destroyUser(id)

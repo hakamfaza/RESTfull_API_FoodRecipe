@@ -1,15 +1,14 @@
 const express = require('express')
-const { insert, list, detail, update, destroy, relation, detailRelation } = require('../controllers/comment.controller')
+const { createComment, getComment, getDetailComment, editeComment, delComment, commentByRecipe } = require('../controllers/comment.controller')
 
 const router = express.Router()
 
 router
-  .post('/comment', insert)
-  .get('/comment', list)
-  .get('/comment/:id', detail)
-  .put('/comment/:id', update)
-  .delete('/comment/:id', destroy)
-  .get('/comment-relation', relation)
-  .get('/comment-relation/:id', detailRelation)
+  .post('/comment', createComment)
+  .get('/comment', getComment)
+  .get('/comment/:id', getDetailComment)
+  .put('/comment/:id', editeComment)
+  .delete('/comment/:id', delComment)
+  .get('/commentbyRecipe/:id', commentByRecipe)
 
 module.exports = router

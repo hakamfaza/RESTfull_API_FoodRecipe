@@ -1,7 +1,7 @@
 const commentModel = require('../models/comment.model')
 
 const commentController = {
-  insert: (req, res) => {
+  createComment: (req, res) => {
     const recipeID = req.body.recipe_id
     const commentText = req.body.comment_text
     const userID = req.body.user_id
@@ -15,7 +15,7 @@ const commentController = {
         res.json(err)
       })
   },
-  list: (req, res) => {
+  getComment: (req, res) => {
     commentModel
       .listComment()
       .then((result) => {
@@ -25,7 +25,7 @@ const commentController = {
         res.json(err)
       })
   },
-  detail: (req, res) => {
+  getDetailComment: (req, res) => {
     const id = req.params.id
     commentModel
       .detailComment(id)
@@ -36,7 +36,7 @@ const commentController = {
         res.json(err)
       })
   },
-  update: (req, res) => {
+  editeComment: (req, res) => {
     const id = req.params.id
     const recipeID = req.body.recipe_id
     const commentText = req.body.comment_text
@@ -51,7 +51,7 @@ const commentController = {
         res.json(err)
       })
   },
-  destroy: (req, res) => {
+  delComment: (req, res) => {
     const id = req.params.id
     commentModel
       .deleteComment(id)
@@ -62,20 +62,11 @@ const commentController = {
         res.json(err)
       })
   },
-  relation: (req, res) => {
-    commentModel
-      .relationCommnet()
-      .then((result) => {
-        res.json(result.rows)
-      })
-      .catch((err) => {
-        res.json(err)
-      })
-  },
-  detailRelation: (req, res) => {
+
+  commentByRecipe: (req, res) => {
     const id = req.params.id
     commentModel
-      .detRelation(id)
+      .commentByRecipe(id)
       .then((result) => {
         res.json(result.rows)
       })

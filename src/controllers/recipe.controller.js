@@ -1,7 +1,7 @@
 const recipeModel = require('../models/recipe.model')
 
 const recipeController = {
-  insert: (req, res) => {
+  createRecipe: (req, res) => {
     const userID = req.body.user_id
     const { image, title, ingredients, vidio, date } = req.body
     recipeModel
@@ -13,7 +13,7 @@ const recipeController = {
         res.json(err)
       })
   },
-  list: (req, res) => {
+  getRecipe: (req, res) => {
     recipeModel
       .allRecipe()
       .then((result) => {
@@ -23,7 +23,7 @@ const recipeController = {
         res.json(err)
       })
   },
-  detail: (req, res) => {
+  getRecipeDetail: (req, res) => {
     const id = req.params.id
     recipeModel
       .detailRecipe(id)
@@ -34,7 +34,7 @@ const recipeController = {
         res.json(err)
       })
   },
-  update: (req, res) => {
+  editRecipe: (req, res) => {
     const id = req.params.id
     const { image, title, ingredients, vidio, date } = req.body
     const userID = req.body.user_id
@@ -47,7 +47,7 @@ const recipeController = {
         res.json(err)
       })
   },
-  destroy: (req, res) => {
+  delRecipe: (req, res) => {
     const id = req.params.id
     recipeModel
       .deleteRecipe(id)
@@ -58,20 +58,10 @@ const recipeController = {
         res.json(err)
       })
   },
-  relation: (req, res) => {
-    recipeModel
-      .allRelation()
-      .then((result) => {
-        res.json(result.rows)
-      })
-      .catch((err) => {
-        res.json(err)
-      })
-  },
-  detailRelation: (req, res) => {
+  recipeByUser: (req, res) => {
     const id = req.params.id
     recipeModel
-      .detRelation(id)
+      .recipeByUser(id)
       .then((result) => {
         res.json(result.rows)
       })
@@ -79,7 +69,7 @@ const recipeController = {
         res.json(err)
       })
   },
-  search: (req, res) => {
+  searchRecipe: (req, res) => {
     const title = req.query.search
 
     recipeModel
@@ -91,7 +81,7 @@ const recipeController = {
         res.json(err)
       })
   },
-  latest: (req, res) => {
+  latestRecipe: (req, res) => {
     recipeModel
       .latesRecipe()
       .then((result) => {

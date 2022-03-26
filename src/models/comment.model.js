@@ -51,17 +51,7 @@ const commentModel = {
       })
     })
   },
-  relationCommnet: () => {
-    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM comment INNER JOIN recipe ON recipe.id=recipe_id', (err, result) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(result)
-      })
-    })
-  },
-  detRelation: (id) => {
+  commentByRecipe: (id) => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM comment INNER JOIN recipe ON recipe.id=recipe_id WHERE recipe.id=$1', [id], (err, result) => {
         if (err) {
