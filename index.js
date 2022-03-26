@@ -1,4 +1,6 @@
 const express = require('express')
+const cors = require('cors')
+const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
 const helmet = require('helmet')
 const xssClean = require('xss-clean')
@@ -12,8 +14,26 @@ app.use(xssClean())
 app.use(helmet())
 app.use(bodyParser.json())
 
-app.use(userRoute, recipeRoute, commentRouter)
+app.use(cors())
 
-app.listen(3000, () => {
-  console.log('Server running on PORT 3000')
+const data = () => {
+  try {
+    app.use(userRoute)
+    app.use(recipeRoute)
+    app.use(commentRouter)
+  } catch (err) {
+    console.log(err)
+  }
+}
+data()
+
+// app.listen(3000, () => {
+//   console.log('Server running on PORT 3000')
+// })
+dotenv.config()
+const host = process.env.SERVER_HOST
+const port = process.env.SERVER_PORT
+app.listen(port, host, () => {
+  console.log(`Your port is ${host}`)
+  console.log(`Your port is ${port}`)
 })
