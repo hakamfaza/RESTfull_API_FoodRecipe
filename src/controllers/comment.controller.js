@@ -62,7 +62,6 @@ const commentController = {
         res.json(err)
       })
   },
-
   commentByRecipe: (req, res) => {
     const id = req.params.id
     commentModel
@@ -73,6 +72,15 @@ const commentController = {
       .catch((err) => {
         res.json(err)
       })
+  },
+  listComment: async (req, res) => {
+    try {
+      const offset = req.query.offset
+      const result = await commentModel.listComment(offset)
+      res.json(result.rows)
+    } catch (err) {
+      res.json(err)
+    }
   }
 
 }

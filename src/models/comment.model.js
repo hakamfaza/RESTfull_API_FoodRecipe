@@ -60,6 +60,16 @@ const commentModel = {
         resolve(result)
       })
     })
+  },
+  commentList: (offset) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM comment LIMIT 5 OFFSET $1', [offset], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
   }
 }
 

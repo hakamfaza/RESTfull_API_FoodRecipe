@@ -50,6 +50,16 @@ const userModel = {
         resolve(result)
       })
     })
+  },
+  listUser: (offset) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM users LIMIT 5 OFFSET $1', [offset], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
   }
 }
 

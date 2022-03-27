@@ -1,5 +1,5 @@
 const express = require('express')
-const { createComment, getComment, getDetailComment, editeComment, delComment, commentByRecipe } = require('../controllers/comment.controller')
+const { createComment, getComment, getDetailComment, editeComment, delComment, commentByRecipe, listComment } = require('../controllers/comment.controller')
 
 const router = express.Router()
 
@@ -10,5 +10,6 @@ router
   .put('/comment/:id', editeComment)
   .delete('/comment/:id', delComment)
   .get('/commentbyRecipe/:id', commentByRecipe)
+  .get('/commentList', listComment)
 
 module.exports = router

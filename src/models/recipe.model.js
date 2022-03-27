@@ -81,6 +81,16 @@ const recipeModel = {
         resolve(result)
       })
     })
+  },
+  pageRecipe: (offset) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM recipe LIMIT 5 OFFSET $1', [offset], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
   }
 
 }

@@ -90,6 +90,15 @@ const recipeController = {
       .catch((err) => {
         res.json(err)
       })
+  },
+  pageList: async (req, res) => {
+    try {
+      const offset = req.query.page
+      const result = await recipeModel.pageRecipe(offset)
+      res.json(result.rows)
+    } catch (err) {
+      res.json(err)
+    }
   }
 }
 
