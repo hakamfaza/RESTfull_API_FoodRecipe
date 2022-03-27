@@ -34,6 +34,5 @@ dotenv.config()
 const host = process.env.SERVER_HOST
 const port = process.env.SERVER_PORT
 app.listen(port, host, () => {
-  console.log(`Your port is ${host}`)
-  console.log(`Your port is ${port}`)
+  console.log(`Server running at http://${host}:${port}/`)
 })

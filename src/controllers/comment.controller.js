@@ -36,7 +36,7 @@ const commentController = {
         res.json(err)
       })
   },
-  editeComment: (req, res) => {
+  editComment: (req, res) => {
     const id = req.params.id
     const recipeID = req.body.recipe_id
     const commentText = req.body.comment_text

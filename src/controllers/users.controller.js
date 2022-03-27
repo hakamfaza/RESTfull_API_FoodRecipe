@@ -59,7 +59,7 @@ const userController = {
   },
   getUserList: async (req, res) => {
     try {
-      const offset = req.query.offset
+      const offset = req.query.page
       const result = await userModel.listUser(offset)
       res.json(result.rows)
     } catch (err) {
