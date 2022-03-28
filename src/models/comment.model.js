@@ -1,19 +1,22 @@
 const db = require('../config/db')
 
 const commentModel = {
-  insertComment: (recipeID, commentText, userID) => {
+  insertComment: (setData) => {
     return new Promise((resolve, reject) => {
-      db.query('INSERT INTO comment (recipe_id, comment_text, user_id) VALUES ($1, $2, $3)', [recipeID, commentText, userID], (err, result) => {
+      db.query('INSERT INTO comment (recipe_id, comment_text, user_id) VALUES ($1, $2, $3)', [setData.recipeID, setData.commentText, setData.userID], (err, result) => {
         if (err) {
           reject(err)
         }
-        resolve(result)
+        const newResult = {
+          message: 'Succsess create comment!'
+        }
+        resolve(newResult)
       })
     })
   },
-  listComment: () => {
+  getComment: (data) => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM comment', (err, result) => {
+      db.query('SELECT * FROM comment LIMIT 5 OFFSET $1', [data.offset], (err, result) => {
         if (err) {
           reject(err)
         }
@@ -31,13 +34,17 @@ const commentModel = {
       })
     })
   },
-  updateComment: (id, recipeID, commentText, userID) => {
+  editComment: (id, setData) => {
     return new Promise((resolve, reject) => {
-      db.query('UPDATE comment SET recipe_id=$2, comment_text=$3, user_id=$4 WHERE id=$1', [id, recipeID, commentText, userID], (err, result) => {
+      db.query('UPDATE comment SET recipe_id=$2, comment_text=$3, user_id=$4 WHERE id=$1', [id, setData.recipeID, setData.commentText, setData.userID], (err, result) => {
         if (err) {
           reject(err)
         }
-        resolve(result)
+        const newResult = {
+          id: id,
+          ...setData
+        }
+        resolve(newResult)
       })
     })
   },
@@ -47,23 +54,16 @@ const commentModel = {
         if (err) {
           reject(err)
         }
-        resolve(result)
+        const newResult = {
+          message: 'Succsess deleted!'
+        }
+        resolve(newResult)
       })
     })
   },
   commentByRecipe: (id) => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM comment INNER JOIN recipe ON recipe.id=recipe_id WHERE recipe.id=$1', [id], (err, result) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(result)
-      })
-    })
-  },
-  commentList: (offset) => {
-    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM comment LIMIT 5 OFFSET $1', [offset], (err, result) => {
         if (err) {
           reject(err)
         }

@@ -4,8 +4,20 @@ const userController = {
 
   createUser: async (req, res) => {
     try {
-      const { name, email, phone, password, image } = req.body
-      const result = await userModel.insertUser(name, email, phone, password, image)
+      const setData = {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+        password: req.body.password,
+        image: req.body.image
+      }
+      if (setData.name === '' || setData.email === '' || setData.password === '') {
+        res.json({
+          message: 'All important data must be filled!'
+        })
+        return
+      }
+      const result = await userModel.createUser(setData)
       res.json(result)
     } catch (err) {
       res.json(err)
@@ -13,7 +25,14 @@ const userController = {
   },
   getUser: async (req, res) => {
     try {
-      const result = await userModel.allUser()
+      const offset = req.query.page
+      const result = await userModel.getUser(offset)
+      if (result.rows.length === 0) {
+        res.json({
+          message: 'Data not found!'
+        })
+        return
+      }
       res.json(result.rows)
     } catch (err) {
       res.json(err)
@@ -23,6 +42,12 @@ const userController = {
     try {
       const id = req.params.id
       const result = await userModel.detailUser(id)
+      if (result.rows.length === 0) {
+        res.json({
+          message: 'Data not found!'
+        })
+        return
+      }
       res.json(result.rows[0])
     } catch (err) {
       res.json(err)
@@ -30,9 +55,21 @@ const userController = {
   },
   editUser: async (req, res) => {
     try {
+      const setData = {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+        password: req.body.password,
+        image: req.body.image
+      }
+      if (setData.name === '' || setData.email === '' || setData.password === '') {
+        res.json({
+          message: 'All important data must be filled!'
+        })
+        return
+      }
       const id = req.params.id
-      const { name, email, phone, password, image } = req.body
-      const result = await userModel.updateUser(id, name, email, phone, password, image)
+      const result = await userModel.putUser(id, setData)
       res.json(result)
     } catch (err) {
       res.json(err)
@@ -41,17 +78,8 @@ const userController = {
   delUser: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await userModel.destroyUser(id)
+      const result = await userModel.deleteUser(id)
       res.json(result)
-    } catch (err) {
-      res.json(err)
-    }
-  },
-  getUserList: async (req, res) => {
-    try {
-      const offset = req.query.page
-      const result = await userModel.listUser(offset)
-      res.json(result.rows)
     } catch (err) {
       res.json(err)
     }

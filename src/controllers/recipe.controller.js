@@ -3,9 +3,21 @@ const recipeModel = require('../models/recipe.model')
 const recipeController = {
   createRecipe: async (req, res) => {
     try {
-      const userID = req.body.user_id
-      const { image, title, ingredients, vidio, date } = req.body
-      const result = await recipeModel.insertRecipe(image, title, ingredients, vidio, date, userID)
+      const setData = {
+        image: req.body.image,
+        title: req.body.title,
+        ingredients: req.body.ingredients,
+        vidio: req.vidio,
+        date: req.body.date,
+        userID: req.body.user_id
+      }
+      if (setData.image === '' || setData.title === '' || setData.ingredients === '' || setData.userID === '') {
+        res.json({
+          message: 'All important data must be filled!'
+        })
+        return
+      }
+      const result = await recipeModel.insertRecipe(setData)
       res.json(result)
     } catch (err) {
       res.json(err)
@@ -13,7 +25,17 @@ const recipeController = {
   },
   getRecipe: async (req, res) => {
     try {
-      const result = await recipeModel.allRecipe()
+      const data = {
+        offset: req.query.offset === undefined ? req.query.offset = 0 : req.query.offset,
+        title: req.query.search === undefined ? req.query.search = '' : req.query.search
+      }
+      const result = await recipeModel.getRecipe(data)
+      if (result.rows.length === 0) {
+        res.json({
+          message: 'Data not found!'
+        })
+        return
+      }
       res.json(result.rows)
     } catch (err) {
       res.json(err)
@@ -23,17 +45,35 @@ const recipeController = {
     try {
       const id = req.params.id
       const result = await recipeModel.detailRecipe(id)
+      if (result.rows.length === 0) {
+        res.json({
+          message: 'Data not found!'
+        })
+        return
+      }
       res.json(result.rows[0])
     } catch (err) {
       res.json(err)
     }
   },
-  editRecipe: async (req, res) => {
+  putRecipe: async (req, res) => {
     try {
       const id = req.params.id
-      const { image, title, ingredients, vidio, date } = req.body
-      const userID = req.body.user_id
-      const result = await recipeModel.updateRecipe(id, image, title, ingredients, vidio, date, userID)
+      const setData = {
+        image: req.body.image,
+        title: req.body.title,
+        ingredients: req.body.ingredients,
+        vidio: req.vidio,
+        date: req.body.date,
+        userID: req.body.user_id
+      }
+      if (setData.image === '' || setData.title === '' || setData.ingredients === '' || setData.userID === '') {
+        res.json({
+          message: 'All important data must be filled!'
+        })
+        return
+      }
+      const result = await recipeModel.editRecipe(id, setData)
       res.json(result)
     } catch (err) {
       res.json(err)
@@ -52,16 +92,13 @@ const recipeController = {
     try {
       const id = req.params.id
       const result = await recipeModel.recipeByUser(id)
+      if (result.rows.length === 0) {
+        res.json({
+          message: 'Data not found!'
+        })
+        return
+      }
       res.json(result)
-    } catch (err) {
-      res.json(err)
-    }
-  },
-  searchRecipe: async (req, res) => {
-    try {
-      const title = req.query.search
-      const result = await recipeModel.searchRecipe(title)
-      res.json(result.rows)
     } catch (err) {
       res.json(err)
     }
@@ -69,15 +106,6 @@ const recipeController = {
   latestRecipe: async (req, res) => {
     try {
       const result = await recipeModel.latesRecipe()
-      res.json(result.rows)
-    } catch (err) {
-      res.json(err)
-    }
-  },
-  pageList: async (req, res) => {
-    try {
-      const offset = req.query.page
-      const result = await recipeModel.pageRecipe(offset)
       res.json(result.rows)
     } catch (err) {
       res.json(err)
