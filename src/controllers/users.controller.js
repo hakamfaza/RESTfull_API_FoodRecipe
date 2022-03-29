@@ -11,7 +11,7 @@ const userController = {
         password: req.body.password,
         image: req.body.image
       }
-      if (setData.name === '' || setData.email === '' || setData.password === '') {
+      if (setData.name === '' || setData.email || setData.phone === '' === '' || setData.password === '') {
         res.json({
           message: 'All important data must be filled!'
         })

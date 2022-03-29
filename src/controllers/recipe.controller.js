@@ -98,7 +98,7 @@ const recipeController = {
         })
         return
       }
-      res.json(result)
+      res.json(result.rows)
     } catch (err) {
       res.json(err)
     }

@@ -9,7 +9,7 @@ router
   .get('/recipe/:id', getRecipeDetail)
   .put('/recipe/:id', putRecipe)
   .delete('/recipe/:id', delRecipe)
-  .get('/recipeByUser/:id', recipeByUser)
+  .get('/recipe-by-user/:id', recipeByUser)
   .get('/recipe-latest', latestRecipe)
 
 module.exports = router
