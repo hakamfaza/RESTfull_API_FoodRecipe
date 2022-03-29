@@ -27,9 +27,6 @@ const data = () => {
 }
 data()
 
-// app.listen(3000, () => {
-//   console.log('Server running on PORT 3000')
-// })
 dotenv.config()
 const host = process.env.SERVER_HOST
 const port = process.env.SERVER_PORT

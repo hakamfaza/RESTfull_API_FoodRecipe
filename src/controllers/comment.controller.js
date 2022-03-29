@@ -23,7 +23,8 @@ const commentController = {
   getComment: async (req, res) => {
     try {
       const data = {
-        offset: req.query.offset === undefined ? req.query.offset = 0 : req.query.offset
+        limit: req.query.limit === undefined ? req.query.limit = 100 : req.query.limit,
+        offset: req.query.page === undefined ? req.query.page = 0 : req.query.page
       }
       const result = await commentModel.getComment(data)
       if (result.rows.length === 0) {

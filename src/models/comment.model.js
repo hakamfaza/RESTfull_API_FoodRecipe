@@ -16,7 +16,7 @@ const commentModel = {
   },
   getComment: (data) => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM comment LIMIT 5 OFFSET $1', [data.offset], (err, result) => {
+      db.query('SELECT * FROM comment LIMIT $1 OFFSET $2', [data.limit, data.offset], (err, result) => {
         if (err) {
           reject(err)
         }

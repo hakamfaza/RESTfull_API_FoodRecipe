@@ -26,7 +26,8 @@ const recipeController = {
   getRecipe: async (req, res) => {
     try {
       const data = {
-        offset: req.query.offset === undefined ? req.query.offset = 0 : req.query.offset,
+        offset: req.query.page === undefined ? req.query.page = 0 : req.query.page,
+        limit: req.query.limit === undefined ? req.query.limit = 100 : req.query.limit,
         title: req.query.search === undefined ? req.query.search = '' : req.query.search
       }
       const result = await recipeModel.getRecipe(data)

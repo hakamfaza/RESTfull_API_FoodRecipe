@@ -14,9 +14,9 @@ const userModel = {
       })
     })
   },
-  getUser: (offset) => {
+  getUser: (data) => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM users LIMIT 5 OFFSET $1', [offset], (err, result) => {
+      db.query('SELECT * FROM users LIMIT $1 OFFSET $2', [data.limit, data.offset], (err, result) => {
         if (err) {
           reject(err)
         }

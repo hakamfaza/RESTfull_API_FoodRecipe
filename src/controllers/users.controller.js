@@ -11,7 +11,7 @@ const userController = {
         password: req.body.password,
         image: req.body.image
       }
-      if (setData.name === '' || setData.email || setData.phone === '' === '' || setData.password === '') {
+      if (setData.name === '' || setData.email === '' || setData.phone === '' || setData.password === '') {
         res.json({
           message: 'All important data must be filled!'
         })
@@ -25,15 +25,19 @@ const userController = {
   },
   getUser: async (req, res) => {
     try {
-      const offset = req.query.page
-      const result = await userModel.getUser(offset)
+      const data = {
+        limit: req.query.limit === undefined ? req.query.limit = 100 : req.query.limit,
+        offset: req.query.page === undefined ? req.query.page = 0 : req.query.page
+      }
+      const result = await userModel.getUser(data)
       if (result.rows.length === 0) {
         res.json({
           message: 'Data not found!'
         })
         return
       }
-      res.json(result.rows)
+      const page = data.offset !== 0 ? res.json({ message: `Sekarang page ${data.offset}` }) : result.rows
+      res.json(page)
     } catch (err) {
       res.json(err)
     }
