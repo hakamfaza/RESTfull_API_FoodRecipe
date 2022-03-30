@@ -50,8 +50,8 @@ Express.js is one of the most popular web frameworks for Node.js. The complete d
 Open **.env** file on code editor and copy the code below :
 
 ```
-DB_HOST = 'localhost'
-DB_USER = 'posgres'
-DB_PASSWORD = '1arex1ar'
-DB_DATABASE = 'db_food_recipe'
+DB_HOST = ''
+DB_USER = ''
+DB_PASSWORD = ''
+DB_DATABASE = ''
 ```
