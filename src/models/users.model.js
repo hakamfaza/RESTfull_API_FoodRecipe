@@ -7,16 +7,23 @@ const userModel = {
         if (err) {
           reject(err)
         }
-        const newResult = {
-          message: 'Success create user!'
+        resolve(result)
+      })
+    })
+  },
+  allData: () => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT COUNT(*) AS total FROM users', (err, result) => {
+        if (err) {
+          reject(err)
         }
-        resolve(newResult)
+        resolve(result)
       })
     })
   },
   getUser: (data) => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM users LIMIT $1 OFFSET $2', [data.limit, data.offset], (err, result) => {
+      db.query('SELECT * FROM users ORDER BY $1 LIMIT $2 OFFSET $3', [data.sortByField, data.limit, data.offset], (err, result) => {
         if (err) {
           reject(err)
         }

@@ -1,3 +1,4 @@
+const { success } = require('../helpers/response')
 const userModel = require('../models/users.model')
 
 const userController = {
@@ -26,18 +27,31 @@ const userController = {
   getUser: async (req, res) => {
     try {
       const data = {
-        limit: req.query.limit === undefined ? req.query.limit = 100 : req.query.limit,
-        offset: req.query.page === undefined ? req.query.page = 0 : req.query.page
+        limit: req.query.limit ? 100 : req.query.limit,
+        offset: req.query.page ? 0 : req.query.page,
+        sortByType: req.query.sortType === 'ASC' || req.query.sortType === 'DESC' ? req.query.sortType : 'ASC'
       }
+      // const getPageValue = data.offset ? Number(data.offset) : 2
+      // const getLimitValue = data.limit ? Number(data.limit) : 1
+      // // const offsetValue = (getPageValue - 1) * getLimitValue
+      // const allData = await userModel.allData()
+      // const totalData = Number(allData.rows[0].total)
+      // const result = await userModel.getUser(data)
+      // if (result.rows.length === 0) {
+      //   res.json({
+      //     message: 'Data not found!'
+      //   })
+      //   return
+      // }
+      // res.json(result.rows)
+      // const pagination = {
+      //   currentPage: getPageValue,
+      //   dataPerPage: getLimitValue,
+      //   totalPage: Math.ceil(totalData / getLimitValue),
+      //   totalData
+      // }
       const result = await userModel.getUser(data)
-      if (result.rows.length === 0) {
-        res.json({
-          message: 'Data not found!'
-        })
-        return
-      }
-      const page = data.offset !== 0 ? res.json({ message: `Sekarang page ${data.offset}` }) : result.rows
-      res.json(page)
+      success(res, result.rows, 'succsess', 'Get all users succsess')
     } catch (err) {
       res.json(err)
     }

@@ -1,11 +1,13 @@
 const express = require('express')
-const { createUser, getUser, getDetailUser, editUser, delUser } = require('../controllers/users.controller')
+const { getUser, getDetailUser, editUser, delUser } = require('../controllers/users.controller')
 
 const router = express.Router()
+const staticAuth = require('../middleware/staticAuth')
 
 router
-  .post('/user', createUser)
-  .get('/user', getUser)
+  // .post('/user', createUser)
+  // If condition is met go to get user
+  .get('/user', staticAuth, getUser)
   .get('/user/:id', getDetailUser)
   .put('/user/:id', editUser)
   .delete('/user/:id', delUser)

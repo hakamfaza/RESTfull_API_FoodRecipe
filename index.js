@@ -8,6 +8,7 @@ const xssClean = require('xss-clean')
 const userRoute = require('./src/router/user.router')
 const recipeRoute = require('./src/router/recipe.router')
 const commentRouter = require('./src/router/comment.router')
+const authRouter = require('./src/router/auth.router')
 
 const app = express()
 app.use(xssClean())
@@ -21,6 +22,7 @@ const data = () => {
     app.use(userRoute)
     app.use(recipeRoute)
     app.use(commentRouter)
+    app.use(authRouter)
   } catch (err) {
     console.log(err)
   }
