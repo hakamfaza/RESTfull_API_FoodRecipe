@@ -9,6 +9,6 @@ router
   .get('/comment/:id', getDetailComment)
   .put('/comment/:id', editComment)
   .delete('/comment/:id', delComment)
-  .get('/comment-by-recipe/:id', commentByRecipe)
+  .get('/comment-by-recipe/:id', commentByRecipe) // Show comments by recipe
 
 module.exports = router

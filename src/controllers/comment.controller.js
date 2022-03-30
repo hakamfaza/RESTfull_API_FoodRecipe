@@ -8,6 +8,7 @@ const commentController = {
         commentText: req.body.comment_text,
         userID: req.body.user_id
       }
+      // Validation
       if (setData.recipeID === '' || setData.commentText === '' || setData.userID === '') {
         res.json({
           message: 'All data must be filled!'
@@ -23,6 +24,7 @@ const commentController = {
   getComment: async (req, res) => {
     try {
       const data = {
+        // Validation use ternary
         limit: req.query.limit === undefined ? req.query.limit = 100 : req.query.limit,
         offset: req.query.page === undefined ? req.query.page = 0 : req.query.page
       }
@@ -61,6 +63,7 @@ const commentController = {
         commentText: req.body.comment_text,
         userID: req.body.user_id
       }
+      // Validation
       if (setData.recipeID === '' || setData.commentText === '' || setData.userID === '') {
         res.json({
           message: 'All data must be filled!'

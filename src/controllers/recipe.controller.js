@@ -11,6 +11,7 @@ const recipeController = {
         date: req.body.date,
         userID: req.body.user_id
       }
+      // Validation
       if (setData.image === '' || setData.title === '' || setData.ingredients === '' || setData.userID === '') {
         res.json({
           message: 'All important data must be filled!'
@@ -26,6 +27,7 @@ const recipeController = {
   getRecipe: async (req, res) => {
     try {
       const data = {
+        // validation use ternary
         offset: req.query.page === undefined ? req.query.page = 0 : req.query.page,
         limit: req.query.limit === undefined ? req.query.limit = 100 : req.query.limit,
         title: req.query.search === undefined ? req.query.search = '' : req.query.search
@@ -68,6 +70,7 @@ const recipeController = {
         date: req.body.date,
         userID: req.body.user_id
       }
+      // Validation
       if (setData.image === '' || setData.title === '' || setData.ingredients === '' || setData.userID === '') {
         res.json({
           message: 'All important data must be filled!'

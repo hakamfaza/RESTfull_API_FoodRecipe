@@ -6,8 +6,7 @@ const staticAuth = require('../middleware/staticAuth')
 
 router
   // .post('/user', createUser)
-  // If condition is met go to get user
-  .get('/user', staticAuth, getUser)
+  .get('/user', staticAuth, getUser) // If condition is met go to get user
   .get('/user/:id', getDetailUser)
   .put('/user/:id', editUser)
   .delete('/user/:id', delUser)

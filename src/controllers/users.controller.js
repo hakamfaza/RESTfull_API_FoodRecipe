@@ -12,6 +12,7 @@ const userController = {
         password: req.body.password,
         image: req.body.image
       }
+      // Validation
       if (setData.name === '' || setData.email === '' || setData.phone === '' || setData.password === '') {
         res.json({
           message: 'All important data must be filled!'
@@ -27,6 +28,7 @@ const userController = {
   getUser: async (req, res) => {
     try {
       const data = {
+        // Validation use ternary
         limit: req.query.limit ? 100 : req.query.limit,
         offset: req.query.page ? 0 : req.query.page,
         sortByType: req.query.sortType === 'ASC' || req.query.sortType === 'DESC' ? req.query.sortType : 'ASC'
@@ -80,6 +82,7 @@ const userController = {
         password: req.body.password,
         image: req.body.image
       }
+      // Validation
       if (setData.name === '' || setData.email === '' || setData.password === '') {
         res.json({
           message: 'All important data must be filled!'
