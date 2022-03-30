@@ -1,4 +1,5 @@
 const recipeModel = require('../models/recipe.model')
+const { success, failed } = require('../helpers/response')
 
 const recipeController = {
   createRecipe: async (req, res) => {
@@ -13,50 +14,48 @@ const recipeController = {
       }
       // Validation
       if (setData.image === '' || setData.title === '' || setData.ingredients === '' || setData.userID === '') {
-        res.json({
-          message: 'All important data must be filled!'
-        })
+        failed(res, null, 'Failed', 'All important data must be present!')
         return
       }
       const result = await recipeModel.insertRecipe(setData)
-      res.json(result)
+      success(res, result, 'Succsess', 'Succses add recipe!')
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to add recipe!')
     }
   },
   getRecipe: async (req, res) => {
     try {
       const data = {
         // validation use ternary
-        offset: req.query.page === undefined ? req.query.page = 0 : req.query.page,
-        limit: req.query.limit === undefined ? req.query.limit = 100 : req.query.limit,
-        title: req.query.search === undefined ? req.query.search = '' : req.query.search
+        offset: req.query.page ? req.query.page : req.query.page = 0,
+        limit: req.query.limit ? req.query.limit : req.query.limit = 100,
+        title: req.query.search ? req.query.search : req.query.search = ''
       }
-      const result = await recipeModel.getRecipe(data)
-      if (result.rows.length === 0) {
-        res.json({
-          message: 'Data not found!'
-        })
-        return
-      }
-      res.json(result.rows)
+      recipeModel.getRecipe(data).then((result) => {
+      // Condition
+        if (result.rowCount > 0) {
+          success(res, result.rows, 'Succsess', 'Successful display recipe!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to display recipe!')
     }
   },
   getRecipeDetail: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await recipeModel.detailRecipe(id)
-      if (result.rows.length === 0) {
-        res.json({
-          message: 'Data not found!'
-        })
-        return
-      }
-      res.json(result.rows[0])
+      recipeModel.detailRecipe(id).then((result) => {
+      // Condition
+        if (result.rowCount > 0) {
+          success(res, result.rows[0], 'Succsess', 'Succsess to display recipe!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to display recipe!')
     }
   },
   putRecipe: async (req, res) => {
@@ -72,47 +71,50 @@ const recipeController = {
       }
       // Validation
       if (setData.image === '' || setData.title === '' || setData.ingredients === '' || setData.userID === '') {
-        res.json({
-          message: 'All important data must be filled!'
-        })
+        failed(res, null, 'Failed', 'All important data must be present!')
         return
       }
       const result = await recipeModel.editRecipe(id, setData)
-      res.json(result)
+      success(res, result.rows, 'Successs', 'Data update succsess!')
     } catch (err) {
-      res.json(err)
+      failed(res, null, 'Failed', 'Update data failed!')
     }
   },
   delRecipe: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await recipeModel.deleteRecipe(id)
-      res.json(result)
+      recipeModel.deleteRecipe(id).then((result) => {
+        // Condition
+        if (result.rowCount > 0) {
+          success(res, result.rows, 'Successs', 'Delete data succsess!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, null, 'Failed', 'Delete data failed!')
     }
   },
   recipeByUser: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await recipeModel.recipeByUser(id)
-      if (result.rows.length === 0) {
-        res.json({
-          message: 'Data not found!'
-        })
-        return
-      }
-      res.json(result.rows)
+      recipeModel.recipeByUser(id).then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result.rows, 'Succsess', 'Successful display recipe by user!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, null, 'Failed', 'Failed display recipe by user!')
     }
   },
   latestRecipe: async (req, res) => {
     try {
       const result = await recipeModel.latesRecipe()
-      res.json(result.rows)
+      success(res, result.rows, 'Succsess', 'Successfully displaying the latest 5 recipes!')
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Succsess', 'Failed displaying the latest 5 recipes!')
     }
   }
 }

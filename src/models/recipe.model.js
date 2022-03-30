@@ -7,10 +7,7 @@ const recipeModel = {
         if (err) {
           reject(err)
         }
-        const newResult = {
-          message: 'Succsess create user!'
-        }
-        resolve(newResult)
+        resolve(result)
       })
     })
   },
@@ -40,11 +37,7 @@ const recipeModel = {
         if (err) {
           reject(err)
         }
-        const newResult = {
-          id: id,
-          ...setData
-        }
-        resolve(newResult)
+        resolve(result)
       })
     })
   },
@@ -54,10 +47,7 @@ const recipeModel = {
         if (err) {
           reject(err)
         }
-        const newResult = {
-          message: 'Succsess deleted!'
-        }
-        resolve(newResult)
+        resolve(result)
       })
     })
   },
