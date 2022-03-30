@@ -54,4 +54,8 @@ DB_HOST = ''
 DB_USER = ''
 DB_PASSWORD = ''
 DB_DATABASE = ''
+DB_PORT = 
+
+SERVER_HOST = 
+SERVER_PORT = 
 ```
