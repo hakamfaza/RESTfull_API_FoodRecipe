@@ -12,6 +12,7 @@ module.exports = {
       userModel
         .loginUser(setData)
         .then((result) => {
+          // rowCount is number of data
           if (result.rowCount > 0) {
             // Compare password from body
             bcrypt.compare(setData.password, result.rows[0].password)

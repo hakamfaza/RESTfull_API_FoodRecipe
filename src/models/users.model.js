@@ -1,18 +1,9 @@
 const db = require('../config/db')
 
 const userModel = {
-  createUser: (setData) => {
-    return new Promise((resolve, reject) => {
-      db.query('INSERT INTO users (name, email, phone, password, image) VALUES ($1, $2, $3, $4, $5)', [setData.name, setData.email, setData.phone, setData.password, setData.image], (err, result) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(result)
-      })
-    })
-  },
   allData: () => {
     return new Promise((resolve, reject) => {
+      // Count is total data
       db.query('SELECT COUNT(*) AS total FROM users', (err, result) => {
         if (err) {
           reject(err)
@@ -47,11 +38,7 @@ const userModel = {
         if (err) {
           reject(err)
         }
-        const newResult = {
-          id: id,
-          ...setData
-        }
-        resolve(newResult)
+        resolve(result)
       })
     })
   },
@@ -61,11 +48,7 @@ const userModel = {
         if (err) {
           reject(err)
         }
-        const newResult = {
-          id: id,
-          message: 'Succsess deleted!'
-        }
-        resolve(newResult)
+        resolve(result)
       })
     })
   }

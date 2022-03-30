@@ -1,30 +1,8 @@
-const { success } = require('../helpers/response')
+const { success, failed } = require('../helpers/response')
 const userModel = require('../models/users.model')
 
 const userController = {
 
-  createUser: async (req, res) => {
-    try {
-      const setData = {
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-        password: req.body.password,
-        image: req.body.image
-      }
-      // Validation
-      if (setData.name === '' || setData.email === '' || setData.phone === '' || setData.password === '') {
-        res.json({
-          message: 'All important data must be filled!'
-        })
-        return
-      }
-      const result = await userModel.createUser(setData)
-      res.json(result)
-    } catch (err) {
-      res.json(err)
-    }
-  },
   getUser: async (req, res) => {
     try {
       const data = {
@@ -53,24 +31,24 @@ const userController = {
       //   totalData
       // }
       const result = await userModel.getUser(data)
-      success(res, result.rows, 'succsess', 'Get all users succsess')
+      success(res, result.rows, 'succsess', 'Get all users succsess!')
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to display data!')
     }
   },
   getDetailUser: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await userModel.detailUser(id)
-      if (result.rows.length === 0) {
-        res.json({
-          message: 'Data not found!'
-        })
-        return
-      }
-      res.json(result.rows[0])
+      userModel.detailUser(id).then((result) => {
+        // rowCount is number of data
+        if (result.rowCount > 0) {
+          success(res, result.rows[0], 'Sucsess', 'Get detail user succsess!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to display data!')
     }
   },
   editUser: async (req, res) => {
@@ -84,25 +62,32 @@ const userController = {
       }
       // Validation
       if (setData.name === '' || setData.email === '' || setData.password === '') {
-        res.json({
-          message: 'All important data must be filled!'
-        })
-        return
+        failed(res, null, 'Failed', 'All data must be filled!')
       }
       const id = req.params.id
-      const result = await userModel.putUser(id, setData)
-      res.json(result)
+      userModel.putUser(id, setData).then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result.rows, 'Succsess', 'Update data success!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to update data!')
     }
   },
   delUser: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await userModel.deleteUser(id)
-      res.json(result)
+      userModel.deleteUser(id).then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result.row[0], 'Succsess', 'Delete has been successful!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to delete data!')
     }
   }
 }
