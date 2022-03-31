@@ -15,7 +15,7 @@ const commentController = {
         return
       }
       const result = await commentModel.insertComment(setData)
-      success(res, result.rows, 'Succsess', 'Succsess create comment!')
+      success(res, result, 'Succsess', 'Succsess create comment!')
     } catch (err) {
       failed(res, err, 'Failed', 'Failed create comment!')
     }

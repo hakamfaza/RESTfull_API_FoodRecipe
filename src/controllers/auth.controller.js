@@ -51,7 +51,7 @@ module.exports = {
         return
       }
       const result = await userModel.createUser(setData)
-      success(res, result.rows, 'sucsess', 'Create user succsess!')
+      success(res, result, 'sucsess', 'Create user succsess!')
     } catch (err) {
       failed(res, err, 'Failed', 'Failed crete user')
     }
