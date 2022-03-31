@@ -12,9 +12,9 @@ const userModel = {
       })
     })
   },
-  getUser: (data) => {
+  getUser: (sortByField, sortByType, getLimitValue, getPageValue) => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM users ORDER BY $1 LIMIT $2 OFFSET $3', [data.sortByField, data.limit, data.offset], (err, result) => {
+      db.query(`SELECT * FROM users ORDER BY ${sortByField} ${sortByType} LIMIT ${getLimitValue} OFFSET ${getPageValue}`, (err, result) => {
         if (err) {
           reject(err)
         }

@@ -11,9 +11,20 @@ const commentModel = {
       })
     })
   },
-  getComment: (data) => {
+  allData: () => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM comment LIMIT $1 OFFSET $2', [data.limit, data.offset], (err, result) => {
+      // Count is total data
+      db.query('SELECT COUNT(*) AS total FROM comment', (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
+  getComment: (sortByField, sortByType, getLimitValue, getPageValue) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT * FROM comment ORDER BY ${sortByField} ${sortByType} LIMIT ${getLimitValue} OFFSET ${getPageValue}`, (err, result) => {
         if (err) {
           reject(err)
         }

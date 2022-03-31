@@ -5,33 +5,30 @@ const userController = {
 
   getUser: async (req, res) => {
     try {
-      const data = {
-        // Validation use ternary
-        limit: req.query.limit ? 100 : req.query.limit,
-        offset: req.query.page ? 0 : req.query.page,
-        sortByType: req.query.sortType === 'ASC' || req.query.sortType === 'DESC' ? req.query.sortType : 'ASC'
-      }
-      // const getPageValue = data.offset ? Number(data.offset) : 2
-      // const getLimitValue = data.limit ? Number(data.limit) : 1
-      // // const offsetValue = (getPageValue - 1) * getLimitValue
-      // const allData = await userModel.allData()
-      // const totalData = Number(allData.rows[0].total)
-      // const result = await userModel.getUser(data)
-      // if (result.rows.length === 0) {
-      //   res.json({
-      //     message: 'Data not found!'
-      //   })
-      //   return
-      // }
-      // res.json(result.rows)
-      // const pagination = {
-      //   currentPage: getPageValue,
-      //   dataPerPage: getLimitValue,
-      //   totalPage: Math.ceil(totalData / getLimitValue),
-      //   totalData
-      // }
-      const result = await userModel.getUser(data)
-      success(res, result.rows, 'succsess', 'Get all users succsess!')
+      const { sortField, sortType, page, limit } = req.query
+      const sortByField = sortField || 'id'
+      const sortByType = sortType || 'ASC'
+
+      // Pagination
+      const getPageValue = page ? Number(page) : 1
+      const getLimitValue = limit ? Number(limit) : 2
+      const getOffsetValue = (getPageValue - 1) * getLimitValue
+      const allData = await userModel.allData()
+      const totalData = Number(allData.rows[0].total)
+
+      userModel.getUser(sortByField, sortByType, getLimitValue, getOffsetValue)
+        .then((result) => {
+          const pagination = {
+            currentPage: getPageValue,
+            dataPerPage: getLimitValue,
+            totalPage: Math.ceil(totalData / getLimitValue),
+            totalData
+          }
+          success(res, result.rows, 'succsess', 'Get all users succsess!', pagination)
+        })
+        .catch((err) => {
+          failed(res, err.message, 'failed', 'get all user failed')
+        })
     } catch (err) {
       failed(res, err, 'Failed', 'Failed to display data!')
     }
