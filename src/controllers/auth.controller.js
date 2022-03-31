@@ -1,6 +1,7 @@
 const userModel = require('../models/auth.model')
 const bcrypt = require('bcrypt')
 const { success, failed, successWithtoken } = require('../helpers/response')
+const jwtToken = require('../helpers/generateJwtToken')
 
 module.exports = {
   login: async (req, res) => {
@@ -16,10 +17,12 @@ module.exports = {
           if (result.rowCount > 0) {
             // Compare password from body
             bcrypt.compare(setData.password, result.rows[0].password)
-              .then((match) => {
+              .then(async (match) => {
                 console.log(match)
                 if (match) {
-                  successWithtoken(res, '12312', 'succsess', 'Login succsess!')
+                  // Token
+                  const token = await jwtToken(result.rows[0])
+                  successWithtoken(res, token, '12312', 'succsess', 'Login succsess!')
                 } else {
                   // When password is wrong
                   failed(res, null, 'failed', 'Email or password is wrong!')
