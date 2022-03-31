@@ -9,7 +9,7 @@ const { isAdmin, isCostumer } = require('../middleware/authorization')
 router
   // .post('/user', createUser)
   .get('/user', jwtAuth, isAdmin, getUser) // If condition is met go to get user
-  .get('/user/:id', isCostumer, getDetailUser)
+  .get('/user/:id', jwtAuth, isCostumer, getDetailUser)
   .put('/user/:id', editUser)
   .delete('/user/:id', delUser)
 

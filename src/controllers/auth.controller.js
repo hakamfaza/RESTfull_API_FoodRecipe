@@ -46,7 +46,7 @@ module.exports = {
         email: req.body.email,
         phone: req.body.phone,
         password: bcrypt.hashSync(req.body.password, 10),
-        image: req.body.image
+        image: req.file.filename
       }
       // Validation
       if (setData.name === '' || setData.email === '' || setData.phone === '' || setData.password === '') {
