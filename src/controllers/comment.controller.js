@@ -1,3 +1,4 @@
+const { success, failed } = require('../helpers/response')
 const commentModel = require('../models/comment.model')
 
 const commentController = {
@@ -10,49 +11,47 @@ const commentController = {
       }
       // Validation
       if (setData.recipeID === '' || setData.commentText === '' || setData.userID === '') {
-        res.json({
-          message: 'All data must be filled!'
-        })
+        failed(res, null, 'Failed', 'All important data must be filled!')
         return
       }
       const result = await commentModel.insertComment(setData)
-      res.json(result)
+      success(res, result.rows, 'Succsess', 'Succsess create comment!')
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed create comment!')
     }
   },
   getComment: async (req, res) => {
     try {
       const data = {
         // Validation use ternary
-        limit: req.query.limit === undefined ? req.query.limit = 100 : req.query.limit,
-        offset: req.query.page === undefined ? req.query.page = 0 : req.query.page
+        limit: req.query.limit ? req.query.limit : req.query.limit = 100,
+        offset: req.query.page ? req.query.page : req.query.page = 0
       }
-      const result = await commentModel.getComment(data)
-      if (result.rows.length === 0) {
-        res.json({
-          message: 'Data not found!'
-        })
-        return
-      }
-      res.json(result.rows)
+      commentModel.getComment(data).then((result) => {
+        // rowCount is number of data
+        if (result.rowCount > 0) {
+          success(res, result.rows, 'Succsess', 'Success display comment!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to display comment!')
     }
   },
   getDetailComment: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await commentModel.detailComment(id)
-      if (result.rows.length === 0) {
-        res.json({
-          message: 'Data not found!'
-        })
-        return
-      }
-      res.json(result.rows[0])
+      commentModel.detailComment(id).then((result) => {
+        // rowCount is number of data
+        if (result.rowCount > 0) {
+          success(res, result.rows[0], 'Succsess', 'Success display comment!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to display comment!')
     }
   },
   editComment: async (req, res) => {
@@ -65,39 +64,41 @@ const commentController = {
       }
       // Validation
       if (setData.recipeID === '' || setData.commentText === '' || setData.userID === '') {
-        res.json({
-          message: 'All data must be filled!'
-        })
+        failed(res, null, 'Failed', 'All data must be filled!')
         return
       }
       const result = await commentModel.editComment(id, setData)
-      res.json(result)
+      success(res, result.rows, 'Succsess', 'Succsess update comment!')
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed update comment!')
     }
   },
   delComment: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await commentModel.deleteComment(id)
-      res.json(result)
+      commentModel.deleteComment(id).then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result.row, 'Succsess', 'Delete has been successful!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, err, 'Failed', 'Failed to delete data!')
     }
   },
   commentByRecipe: async (req, res) => {
     try {
       const id = req.params.id
-      const result = await commentModel.commentByRecipe(id)
-      if (result.rows.length === 0) {
-        res.json({
-          message: 'Data not found!'
-        })
-        return
-      }
-      res.json(result.rows)
+      commentModel.commentByRecipe(id).then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result.rows, 'Succsess', 'Successfully to display data!')
+        } else {
+          failed(res, null, 'Failed', 'Data not found!')
+        }
+      })
     } catch (err) {
-      res.json(err)
+      failed(res, null, 'Failed', 'Failed to display data!')
     }
   }
 }
