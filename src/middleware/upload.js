@@ -23,6 +23,9 @@ const multerUpload = multer({
       }
       cb(error, false)
     }
+  },
+  limits: {
+    fileSize: 2000000
   }
 })
 
