@@ -25,19 +25,27 @@ const recipeController = {
   },
   getRecipe: async (req, res) => {
     try {
-      const data = {
-        // validation use ternary
-        offset: req.query.page ? req.query.page : req.query.page = 0,
-        limit: req.query.limit ? req.query.limit : req.query.limit = 100,
-        title: req.query.search ? req.query.search : req.query.search = ''
-      }
-      recipeModel.getRecipe(data).then((result) => {
-      // Condition
-        if (result.rowCount > 0) {
-          success(res, result.rows, 'Succsess', 'Successful display recipe!')
-        } else {
-          failed(res, null, 'Failed', 'Data not found!')
+      const { search, sortField, sortType, page, limit } = req.query
+      const getSearch = search || ''
+      const sortByField = sortField || 'id'
+      const sortByType = sortType || 'ASC'
+
+      // Pagination
+      const getPageValue = page ? Number(page) : 1
+      const getLimitValue = limit ? Number(limit) : 2
+      const getOffsetValue = (getPageValue - 1) * getLimitValue
+      const allData = await recipeModel.allData()
+      const totalData = Number(allData.rows[0].total)
+
+      recipeModel.getRecipe(getSearch, sortByField, sortByType, getLimitValue, getOffsetValue).then((result) => {
+        const pagination = {
+          currentPage: getPageValue,
+          dataPerPage: getLimitValue,
+          totalPage: Math.ceil(totalData / getLimitValue),
+          totalData
         }
+        success(res, result.rows, 'succsess', 'Get all recipe succsess!', pagination)
+        // res.json(result.rows)
       })
     } catch (err) {
       failed(res, err, 'Failed', 'Failed to display recipe!')

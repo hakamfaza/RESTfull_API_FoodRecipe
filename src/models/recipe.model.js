@@ -11,9 +11,20 @@ const recipeModel = {
       })
     })
   },
-  getRecipe: (data) => {
+  allData: () => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM recipe WHERE title ILIKE \'%\' ||$1||\'%\' LIMIT $2 OFFSET $3', [data.title, data.limit, data.offset], (err, result) => {
+      // Count is total data
+      db.query('SELECT COUNT(*) AS total FROM recipe', (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
+  getRecipe: (getSearch, sortByField, sortByType, getLimitValue, getOffsetValue) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT * FROM recipe WHERE title ILIKE '%${getSearch}%' ORDER BY ${sortByField} ${sortByType} LIMIT ${getLimitValue} OFFSET ${getOffsetValue}`, (err, result) => {
         if (err) {
           reject(err)
         }
