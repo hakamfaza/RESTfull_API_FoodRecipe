@@ -1,5 +1,7 @@
-const userModel = require('../models/auth.model')
 const bcrypt = require('bcrypt')
+const salt = 10
+
+const userModel = require('../models/auth.model')
 const { success, failed, successWithtoken } = require('../helpers/response')
 const jwtToken = require('../helpers/generateJwtToken')
 
@@ -45,7 +47,7 @@ module.exports = {
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
-        password: bcrypt.hashSync(req.body.password, 10),
+        password: bcrypt.hashSync(req.body.password, salt),
         image: req.file.filename
       }
       // Validation

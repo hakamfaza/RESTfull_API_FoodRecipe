@@ -1,4 +1,7 @@
+const bcrypt = require('bcrypt')
+const salt = 10
 const { success, failed } = require('../helpers/response')
+
 const userModel = require('../models/users.model')
 
 const userController = {
@@ -54,17 +57,18 @@ const userController = {
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
-        password: req.body.password,
-        image: req.body.image
+        password: bcrypt.hashSync(req.body.password, salt),
+        image: req.body.image,
+        id: req.APP_DATA.decode.id
       }
+
       // Validation
       if (setData.name === '' || setData.email === '' || setData.password === '') {
         failed(res, null, 'Failed', 'All data must be filled!')
       }
-      const id = req.params.id
-      userModel.putUser(id, setData).then((result) => {
+      userModel.putUser(setData).then((result) => {
         if (result.rowCount > 0) {
-          success(res, result.rows, 'Succsess', 'Update data success!')
+          success(res, result, 'Succsess', 'Update data success!')
         } else {
           failed(res, null, 'Failed', 'Data not found!')
         }

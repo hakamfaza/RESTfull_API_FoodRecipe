@@ -44,7 +44,7 @@ const recipeModel = {
   },
   editRecipe: (id, setData) => {
     return new Promise((resolve, reject) => {
-      db.query('UPDATE recipe SET image=$2, title=$3, ingredients=$4, vidio=$5, date=$6, user_id=$7 WHERE id=$1 AND $8', [id, setData.image, setData.title, setData.ingredients, setData.vidio, setData.date, setData.userID, setData.userID], (err, result) => {
+      db.query('UPDATE recipe SET image=$2, title=$3, ingredients=$4, vidio=$5, date=$6, user_id=$7 WHERE id=$1 AND user_id=$8', [id, setData.image, setData.title, setData.ingredients, setData.vidio, setData.date, setData.userID, setData.userID], (err, result) => {
         if (err) {
           reject(err)
         }
