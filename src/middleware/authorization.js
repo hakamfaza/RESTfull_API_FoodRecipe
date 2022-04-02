@@ -8,10 +8,16 @@ module.exports = {
     }
   },
   isCostumer: (req, res, next) => {
-    if (req.APP_DATA.tokenDecoded.level === 1) {
-      next()
-    } else {
-      failed(res, null, failed, 'User dont have acces!')
+    try {
+      const decode = req.APP_DATA.tokenDecoded
+      if (decode.level === 1) {
+        req.APP_DATA = { decode }
+        next()
+      } else {
+        failed(res, null, failed, 'User dont have acces!')
+      }
+    } catch (error) {
+      failed(res, null, failed, 'error server!')
     }
   }
 }

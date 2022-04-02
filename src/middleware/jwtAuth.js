@@ -6,6 +6,7 @@ module.exports = (req, res, next) => {
   try {
     const { token } = req.headers
     const decoded = jwt.verify(token, JWT_SECRET)
+    // console.log(decoded)
     req.APP_DATA = {
       tokenDecoded: decoded
     }

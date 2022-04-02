@@ -4,16 +4,19 @@ const { success, failed } = require('../helpers/response')
 const recipeController = {
   createRecipe: async (req, res) => {
     try {
+      console.log(req.file.filename)
       const setData = {
-        image: req.body.image,
+        image: req.file.filename,
         title: req.body.title,
         ingredients: req.body.ingredients,
-        vidio: req.vidio,
+        vidio: req.file.filename,
         date: req.body.date,
-        userID: req.body.user_id
+        userID: req.APP_DATA.decode.id,
+        isActive: 1
       }
+
       // Validation
-      if (setData.image === '' || setData.title === '' || setData.ingredients === '' || setData.userID === '') {
+      if (setData.title === '' || setData.ingredients === '' || setData.userID === '') {
         failed(res, null, 'Failed', 'All important data must be present!')
         return
       }
@@ -75,7 +78,7 @@ const recipeController = {
         ingredients: req.body.ingredients,
         vidio: req.vidio,
         date: req.body.date,
-        userID: req.body.user_id
+        userID: req.APP_DATA.decode.id
       }
       // Validation
       if (setData.image === '' || setData.title === '' || setData.ingredients === '' || setData.userID === '') {
@@ -85,13 +88,20 @@ const recipeController = {
       const result = await recipeModel.editRecipe(id, setData)
       success(res, result.rows, 'Successs', 'Data update succsess!')
     } catch (err) {
-      failed(res, null, 'Failed', 'Update data failed!')
+      console.log(err.message)
+      const userID = req.APP_DATA.decode.id
+      if (err.message === `invalid input syntax for type boolean: "${userID}"`) {
+        failed(res, null, 'Failed', 'You don\'t update this recipe!')
+      } else {
+        failed(res, null, 'Failed', 'Update data failed!')
+      }
     }
   },
   delRecipe: async (req, res) => {
     try {
       const id = req.params.id
-      recipeModel.deleteRecipe(id).then((result) => {
+      const userID = req.APP_DATA.decode.id
+      recipeModel.deleteRecipe(id, userID).then((result) => {
         // Condition
         if (result.rowCount > 0) {
           success(res, result.rows, 'Successs', 'Delete data succsess!')
@@ -100,7 +110,26 @@ const recipeController = {
         }
       })
     } catch (err) {
-      failed(res, null, 'Failed', 'Delete data failed!')
+      console.log(err.message)
+      // const isError =
+      if (err.message === 'Cannot read properties of undefined (reading \'id\')') {
+        failed(res, err.message, 'Failed', 'you can\'t delete this recipe!')
+      } else {
+        failed(res, err.message, 'Failed', 'Delete data failed!')
+      }
+    }
+  },
+  getAllRecipeByUser: (req, res) => {
+    try {
+      recipeModel.getAllRecipeByUser().then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result.rows, 'succses', 'succsess display all recipe by user!')
+        } else {
+          failed(res, null, 'failed', 'data not found!')
+        }
+      })
+    } catch (err) {
+      failed(res, err.message, 'failed', 'failed display all recipe by user!')
     }
   },
   recipeByUser: async (req, res) => {
@@ -123,6 +152,22 @@ const recipeController = {
       success(res, result.rows, 'Succsess', 'Successfully displaying the latest 5 recipes!')
     } catch (err) {
       failed(res, err, 'Succsess', 'Failed displaying the latest 5 recipes!')
+    }
+  },
+  blockRecipe: async (req, res) => {
+    try {
+      const id = req.params.id
+      const block = req.body.block
+      const getBlcok = block ? 1 : 0
+      recipeModel.blockRecipe(id, getBlcok).then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result, 'success', 'succsessfully block recipe!')
+        } else {
+          failed(res, null, 'failed', 'Data not found!')
+        }
+      })
+    } catch (err) {
+      failed(res, err.message, 'failed', 'failed block recipe!')
     }
   }
 }

@@ -23,15 +23,15 @@ const multerUpload = multer({
       }
       cb(error, false)
     }
-  },
-  limits: {
-    fileSize: 2000000
   }
 })
 
 // Middelware
 const upload = (req, res, next) => {
-  const multerSingle = multerUpload.single('gambar')
+  const multerSingle = multerUpload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'vidio', maxCount: 1 }
+  ])
   multerSingle(req, res, (err) => {
     if (err) {
       res.json({
