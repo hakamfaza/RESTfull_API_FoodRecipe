@@ -9,6 +9,7 @@ const userRoute = require('./src/router/user.router')
 const recipeRoute = require('./src/router/recipe.router')
 const commentRouter = require('./src/router/comment.router')
 const authRouter = require('./src/router/auth.router')
+const { SERVER_HOST, SERVER_PORT } = require('./src/helpers/env')
 
 const app = express()
 app.use(xssClean())
@@ -30,8 +31,8 @@ const data = () => {
 data()
 
 dotenv.config()
-const host = process.env.SERVER_HOST
-const port = process.env.SERVER_PORT
+const host = SERVER_HOST
+const port = SERVER_PORT
 app.listen(port, host, () => {
   console.log(`Server running at http://${host}:${port}/`)
 })
