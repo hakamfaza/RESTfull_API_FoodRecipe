@@ -1,6 +1,8 @@
 const multer = require('multer')
 const path = require('path')
 
+const { failed } = require('../helpers/response')
+
 // Management file
 const multerUpload = multer({
   storage: multer.diskStorage({
@@ -25,19 +27,16 @@ const multerUpload = multer({
     }
   }
 })
-
 // Middelware
 const upload = (req, res, next) => {
-  const multerSingle = multerUpload.fields([
+  const multerFields = multerUpload.fields([
     { name: 'image', maxCount: 1 },
     { name: 'vidio', maxCount: 1 }
   ])
-  multerSingle(req, res, (err) => {
+  multerFields(req, res, (err) => {
     if (err) {
-      res.json({
-        message: 'error upload file',
-        error: err
-      })
+      failed(res, err.message, 'failed', 'Error Upload file!'
+      )
     } else {
       next()
     }

@@ -84,7 +84,7 @@ const recipeModel = {
   },
   latesRecipe: () => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM recipe ORDER BY date DESC LIMIT 5', (err, result) => {
+      db.query('SELECT image, title, date FROM recipe ORDER BY date DESC LIMIT 5', (err, result) => {
         if (err) {
           reject(err)
         }

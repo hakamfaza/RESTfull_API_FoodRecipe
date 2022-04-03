@@ -12,8 +12,8 @@ router
   .post('/recipe', jwtAuth, isCostumer, upload, createRecipe)
   .get('/recipe', jwtAuth, getRecipe)
   .get('/recipe/:id', jwtAuth, getRecipeDetail)
-  .put('/recipe/:id', jwtAuth, isCostumer, putRecipe)
-  .delete('/recipe/:id', jwtAuth, delRecipe)
+  .put('/recipe/:id', jwtAuth, isCostumer, upload, putRecipe)
+  .delete('/recipe/:id', jwtAuth, isCostumer, delRecipe)
   .get('/recipe-by-user', jwtAuth, isAdmin, getAllRecipeByUser)
   .get('/recipe-by-user/:id', jwtAuth, isAdmin, recipeByUser) // Show recipe by id user
   .get('/recipe-latest', latestRecipe)

@@ -58,7 +58,7 @@ const userController = {
         email: req.body.email,
         phone: req.body.phone,
         password: bcrypt.hashSync(req.body.password, salt),
-        image: req.body.image,
+        image: req.files.image[0].filename,
         id: req.APP_DATA.decode.id
       }
 
