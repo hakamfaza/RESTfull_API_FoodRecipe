@@ -1,3 +1,4 @@
+const validator = require('email-validator')
 const bcrypt = require('bcrypt')
 const salt = 10
 
@@ -11,6 +12,11 @@ module.exports = {
       const setData = {
         email: req.body.email,
         password: req.body.password
+      }
+      const isEmail = validator.validate(setData.email)
+      if (!isEmail) {
+        failed(res, null, 'failed', 'wrong email format')
+        return
       }
       userModel
         .loginUser(setData)
