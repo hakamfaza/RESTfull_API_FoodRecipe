@@ -1,5 +1,6 @@
 const recipeModel = require('../models/recipe.model')
 const { success, failed } = require('../helpers/response')
+const deleteFile = require('../helpers/delete')
 
 const recipeController = {
   createRecipe: async (req, res) => {
@@ -72,6 +73,13 @@ const recipeController = {
   putRecipe: async (req, res) => {
     try {
       const id = req.params.id
+      const check = await recipeModel.detailRecipe(id)
+
+      const image = check.rows[0].image
+      const vidio = check.rows[0].vidio
+
+      deleteFile(`./public/${image}`)
+      deleteFile(`./public/${vidio}`)
       const setData = {
         image: req.files.image[0].filename,
         title: req.body.title,
@@ -100,7 +108,13 @@ const recipeController = {
     try {
       const id = req.params.id
       const userID = req.APP_DATA.decode.id
+      const check = await recipeModel.detailRecipe(id)
 
+      const image = check.rows[0].image
+      const vidio = check.rows[0].vidio
+
+      deleteFile(`./public/${image}`)
+      deleteFile(`./public/${vidio}`)
       recipeModel.deleteRecipe(id, userID).then((result) => {
         // Condition
         if (result.rowCount > 0) {
