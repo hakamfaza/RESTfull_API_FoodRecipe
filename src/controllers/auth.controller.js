@@ -4,7 +4,6 @@ const salt = 10
 const userModel = require('../models/auth.model')
 const { success, failed, successWithtoken } = require('../helpers/response')
 const jwtToken = require('../helpers/generateJwtToken')
-const deleteFile = require('../helpers/delete')
 
 module.exports = {
   login: async (req, res) => {
@@ -51,7 +50,7 @@ module.exports = {
         password: bcrypt.hashSync(req.body.password, salt),
         image: req.files.image[0].filename
       }
-      deleteFile(`./public/${setData.image}`)
+
       // Validation
       if (setData.name === '' || setData.email === '' || setData.phone === '' || setData.password === '') {
         failed(res, null, 'Failed', 'All important data must be filled!')

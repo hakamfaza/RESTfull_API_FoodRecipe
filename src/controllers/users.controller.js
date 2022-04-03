@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const deleteFile = require('../helpers/delete')
 const salt = 10
 const { success, failed } = require('../helpers/response')
 
@@ -61,6 +62,12 @@ const userController = {
         image: req.files.image[0].filename,
         id: req.APP_DATA.decode.id
       }
+
+      const check = await userModel.detailUser(setData.id)
+
+      const image = check.rows[0].image
+
+      deleteFile(`./public/${image}`)
 
       // Validation
       if (setData.name === '' || setData.email === '' || setData.password === '') {
