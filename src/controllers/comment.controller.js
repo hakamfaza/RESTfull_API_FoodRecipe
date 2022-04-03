@@ -7,8 +7,9 @@ const commentController = {
       const setData = {
         recipeID: req.body.recipe_id,
         commentText: req.body.comment_text,
-        userID: req.body.user_id
+        userID: req.APP_DATA.decode.id
       }
+      console.log(setData.userID)
       // Validation
       if (setData.recipeID === '' || setData.commentText === '' || setData.userID === '') {
         failed(res, null, 'Failed', 'All important data must be filled!')
@@ -71,15 +72,20 @@ const commentController = {
       const setData = {
         recipeID: req.body.recipe_id,
         commentText: req.body.comment_text,
-        userID: req.body.user_id
+        userID: req.APP_DATA.decode.id
       }
       // Validation
       if (setData.recipeID === '' || setData.commentText === '' || setData.userID === '') {
         failed(res, null, 'Failed', 'All data must be filled!')
         return
       }
-      const result = await commentModel.editComment(id, setData)
-      success(res, result.rows, 'Succsess', 'Succsess update comment!')
+      commentModel.editComment(id, setData).then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result, 'Succsess', 'Succsess update comment!')
+        } else {
+          failed(res, null, 'Failed', 'You don\'t update this comment!')
+        }
+      })
     } catch (err) {
       failed(res, err, 'Failed', 'Failed update comment!')
     }
@@ -87,11 +93,12 @@ const commentController = {
   delComment: async (req, res) => {
     try {
       const id = req.params.id
-      commentModel.deleteComment(id).then((result) => {
+      const userID = req.APP_DATA.decode.id
+      commentModel.deleteComment(id, userID).then((result) => {
         if (result.rowCount > 0) {
           success(res, result.row, 'Succsess', 'Delete has been successful!')
         } else {
-          failed(res, null, 'Failed', 'Data not found!')
+          failed(res, null, 'Failed', 'You don\'t delete this comment!')
         }
       })
     } catch (err) {

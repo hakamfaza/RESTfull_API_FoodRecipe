@@ -2,14 +2,16 @@ const express = require('express')
 const { createComment, getComment, getDetailComment, editComment, delComment, commentByRecipe } = require('../controllers/comment.controller')
 const jwtAuth = require('../middleware/jwtAuth')
 
+const { isCostumer, isAdmin } = require('../middleware/authorization')
+
 const router = express.Router()
 
 router
-  .post('/comment', jwtAuth, createComment)
-  .get('/comment', jwtAuth, getComment)
-  .get('/comment/:id', jwtAuth, getDetailComment)
-  .put('/comment/:id', jwtAuth, editComment)
-  .delete('/comment/:id', jwtAuth, delComment)
-  .get('/comment-by-recipe/:id', commentByRecipe) // Show comments by recipe
+  .post('/comment', jwtAuth, isCostumer, createComment)
+  .get('/comment', jwtAuth, isCostumer, getComment)
+  .get('/comment/:id', jwtAuth, isAdmin, getDetailComment)
+  .put('/comment/:id', jwtAuth, isCostumer, editComment)
+  .delete('/comment/:id', jwtAuth, isCostumer, delComment)
+  .get('/comment-by-recipe/:id', jwtAuth, isCostumer, commentByRecipe) // Show comments by recipe
 
 module.exports = router

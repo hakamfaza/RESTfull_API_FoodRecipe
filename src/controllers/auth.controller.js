@@ -20,7 +20,6 @@ module.exports = {
             // Compare password from body
             bcrypt.compare(setData.password, result.rows[0].password)
               .then(async (match) => {
-                console.log(match)
                 if (match) {
                   // Token
                   const token = await jwtToken(result.rows[0])

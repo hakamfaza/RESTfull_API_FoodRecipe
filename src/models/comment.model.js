@@ -44,7 +44,7 @@ const commentModel = {
   },
   editComment: (id, setData) => {
     return new Promise((resolve, reject) => {
-      db.query('UPDATE comment SET recipe_id=$2, comment_text=$3, user_id=$4 WHERE id=$1', [id, setData.recipeID, setData.commentText, setData.userID], (err, result) => {
+      db.query('UPDATE comment SET recipe_id=$2, comment_text=$3, user_id=$4 WHERE id=$1 AND user_id=$5', [id, setData.recipeID, setData.commentText, setData.userID, setData.userID], (err, result) => {
         if (err) {
           reject(err)
         }
@@ -52,9 +52,9 @@ const commentModel = {
       })
     })
   },
-  deleteComment: (id) => {
+  deleteComment: (id, userID) => {
     return new Promise((resolve, reject) => {
-      db.query('DELETE FROM comment WHERE id=$1', [id], (err, result) => {
+      db.query('DELETE FROM comment WHERE id=$1 AND user_id=$2', [id, userID], (err, result) => {
         if (err) {
           reject(err)
         }
