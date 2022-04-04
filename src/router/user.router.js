@@ -9,7 +9,7 @@ const router = express.Router()
 
 router
   .get('/user', jwtAuth, isAdmin, getUser) // If condition is met go to get user
-  .get('/user/:id', jwtAuth, isCostumer, getDetailUser)
+  .get('/user/:id', jwtAuth, getDetailUser)
   .put('/user', jwtAuth, isCostumer, upload, editUser)
   .delete('/user/:id', jwtAuth, isAdmin, delUser)
 

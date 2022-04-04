@@ -25,14 +25,12 @@ const multerUpload = multer({
       }
       cb(error, false)
     }
-  }
+  },
+  limits: { fileSize: 1024 * 1024 * 2 }
 })
 // Middelware
 const upload = (req, res, next) => {
-  const multerFields = multerUpload.fields([
-    { name: 'image', maxCount: 1 },
-    { name: 'vidio', maxCount: 1 }
-  ])
+  const multerFields = multerUpload.single('image')
   multerFields(req, res, (err) => {
     if (err) {
       failed(res, err.message, 'failed', 'Error Upload file!'

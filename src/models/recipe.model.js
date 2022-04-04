@@ -11,10 +11,10 @@ const recipeModel = {
       })
     })
   },
-  allData: () => {
+  allData: (isActive) => {
     return new Promise((resolve, reject) => {
       // Count is total data
-      db.query('SELECT COUNT(*) AS total FROM recipe WHERE is_active = 1', (err, result) => {
+      db.query('SELECT COUNT(*) AS total FROM recipe WHERE is_active = 1 OR is_active=$1', [isActive], (err, result) => {
         if (err) {
           reject(err)
         }
@@ -22,9 +22,9 @@ const recipeModel = {
       })
     })
   },
-  getRecipe: (getSearch, sortByField, sortByType, getLimitValue, getOffsetValue) => {
+  getRecipe: (getSearch, sortByField, sortByType, getLimitValue, getOffsetValue, isActive) => {
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM recipe WHERE title ILIKE '%${getSearch}%' AND is_active = 1 ORDER BY ${sortByField} ${sortByType} LIMIT ${getLimitValue} OFFSET ${getOffsetValue}`, (err, result) => {
+      db.query(`SELECT * FROM recipe WHERE title ILIKE '%${getSearch}%' AND is_active = 1 OR is_active = ${isActive} ORDER BY ${sortByField} ${sortByType} LIMIT ${getLimitValue} OFFSET ${getOffsetValue}`, (err, result) => {
         if (err) {
           reject(err)
         }

@@ -7,10 +7,10 @@ const recipeController = {
     try {
       // console.log(req.file.filename[0])
       const setData = {
-        image: req.files.image[0].filename,
+        image: req.file.filename,
         title: req.body.title,
         ingredients: req.body.ingredients,
-        vidio: req.files.vidio[0].filename,
+        vidio: req.body.vidio,
         date: req.body.date,
         userID: req.APP_DATA.decode.id,
         isActive: 1
@@ -30,6 +30,8 @@ const recipeController = {
   getRecipe: async (req, res) => {
     try {
       const { search, sortField, sortType, page, limit } = req.query
+      const isActive = req.APP_DATA.tokenDecoded.is_active
+
       const getSearch = search || ''
       const sortByField = sortField || 'id'
       const sortByType = sortType || 'ASC'
@@ -38,10 +40,10 @@ const recipeController = {
       const getPageValue = page ? Number(page) : 1
       const getLimitValue = limit ? Number(limit) : 2
       const getOffsetValue = (getPageValue - 1) * getLimitValue
-      const allData = await recipeModel.allData()
+      const allData = await recipeModel.allData(isActive)
       const totalData = Number(allData.rows[0].total)
 
-      recipeModel.getRecipe(getSearch, sortByField, sortByType, getLimitValue, getOffsetValue).then((result) => {
+      recipeModel.getRecipe(getSearch, sortByField, sortByType, getLimitValue, getOffsetValue, isActive).then((result) => {
         const pagination = {
           currentPage: getPageValue,
           dataPerPage: getLimitValue,

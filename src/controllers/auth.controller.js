@@ -53,7 +53,9 @@ module.exports = {
         email: req.body.email,
         phone: req.body.phone,
         password: bcrypt.hashSync(req.body.password, salt),
-        image: req.files.image[0].filename
+        image: req.file.filename,
+        level: req.body.level ? 0 : 1,
+        isActive: 1
       }
 
       // Validation
