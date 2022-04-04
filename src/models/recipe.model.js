@@ -62,17 +62,7 @@ const recipeModel = {
       })
     })
   },
-  getAllRecipeByUser: () => {
-    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM recipe INNER JOIN users ON user_id=users.id', (err, result) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(result)
-      })
-    })
-  },
-  recipeByUser: (id) => {
+  getAllRecipeByUser: (id) => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM recipe INNER JOIN users ON user_id=users.id WHERE users.id=$1', [id], (err, result) => {
         if (err) {

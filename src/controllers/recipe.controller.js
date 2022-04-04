@@ -30,7 +30,8 @@ const recipeController = {
   getRecipe: async (req, res) => {
     try {
       const { search, sortField, sortType, page, limit } = req.query
-      const isActive = req.APP_DATA.tokenDecoded.is_active
+      const isActive = req.APP_DATA.tokenDecoded.level
+      console.log(isActive)
 
       const getSearch = search || ''
       const sortByField = sortField || 'id'
@@ -78,15 +79,14 @@ const recipeController = {
       const check = await recipeModel.detailRecipe(id)
 
       const image = check.rows[0].image
-      const vidio = check.rows[0].vidio
 
       deleteFile(`./public/${image}`)
-      deleteFile(`./public/${vidio}`)
+
       const setData = {
-        image: req.files.image[0].filename,
+        image: req.file.filename,
         title: req.body.title,
         ingredients: req.body.ingredients,
-        vidio: req.files.vidio[0].filename,
+        vidio: req.body.vidio,
         date: req.body.date,
         userID: req.APP_DATA.decode.id
       }
@@ -113,10 +113,9 @@ const recipeController = {
       const check = await recipeModel.detailRecipe(id)
 
       const image = check.rows[0].image
-      const vidio = check.rows[0].vidio
 
       deleteFile(`./public/${image}`)
-      deleteFile(`./public/${vidio}`)
+
       recipeModel.deleteRecipe(id, userID).then((result) => {
         // Condition
         if (result.rowCount > 0) {
@@ -131,7 +130,9 @@ const recipeController = {
   },
   getAllRecipeByUser: (req, res) => {
     try {
-      recipeModel.getAllRecipeByUser().then((result) => {
+      const id = req.APP_DATA.decode.id
+      console.log(id)
+      recipeModel.getAllRecipeByUser(id).then((result) => {
         if (result.rowCount > 0) {
           success(res, result.rows, 'succses', 'succsess display all recipe by user!')
         } else {
@@ -140,20 +141,6 @@ const recipeController = {
       })
     } catch (err) {
       failed(res, err.message, 'failed', 'failed display all recipe by user!')
-    }
-  },
-  recipeByUser: async (req, res) => {
-    try {
-      const id = req.params.id
-      recipeModel.recipeByUser(id).then((result) => {
-        if (result.rowCount > 0) {
-          success(res, result.rows, 'Succsess', 'Successful display recipe by user!')
-        } else {
-          failed(res, null, 'Failed', 'Data not found!')
-        }
-      })
-    } catch (err) {
-      failed(res, null, 'Failed', 'Failed display recipe by user!')
     }
   },
   latestRecipe: async (req, res) => {
