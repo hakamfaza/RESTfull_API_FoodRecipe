@@ -97,6 +97,24 @@ const userController = {
     } catch (err) {
       failed(res, err, 'Failed', 'Failed to delete data!')
     }
+  },
+  blockUser: (req, res) => {
+    try {
+      const id = req.params.id
+      const isBlock = req.body.is_active
+      const isActive = isBlock ? 1 : 0
+      console.log(id, isActive)
+
+      userModel.blockUser(id, isActive).then((result) => {
+        if (result.rowCount > 0) {
+          success(res, result, 'success', 'succsessfully block user!')
+        } else {
+          failed(res, null, 'failed', 'Data not found!')
+        }
+      })
+    } catch (err) {
+      failed(res, err.message, 'failed', 'failed block user!')
+    }
   }
 }
 

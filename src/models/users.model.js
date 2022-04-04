@@ -51,6 +51,16 @@ const userModel = {
         resolve(result)
       })
     })
+  },
+  blockUser: (id, isActive) => {
+    return new Promise((resolve, reject) => {
+      db.query('UPDATE users SET is_active=$1 WHERE id=$2', [isActive, id], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
   }
 }
 
