@@ -153,8 +153,9 @@ const recipeController = {
   blockRecipe: async (req, res) => {
     try {
       const id = req.params.id
-      const block = req.body.block
+      const block = req.body.is_active
       const getBlcok = block ? 1 : 0
+      console.log(getBlcok)
       recipeModel.blockRecipe(id, getBlcok).then((result) => {
         if (result.rowCount > 0) {
           success(res, result, 'success', 'succsessfully block recipe!')
