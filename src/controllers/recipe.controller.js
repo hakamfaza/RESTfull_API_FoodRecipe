@@ -31,7 +31,6 @@ const recipeController = {
     try {
       const { search, sortField, sortType, page, limit } = req.query
       const isActive = req.APP_DATA.tokenDecoded.level
-      console.log(isActive)
 
       const getSearch = search || ''
       const sortByField = sortField || 'id'
@@ -131,7 +130,7 @@ const recipeController = {
   getAllRecipeByUser: (req, res) => {
     try {
       const id = req.APP_DATA.decode.id
-      console.log(id)
+
       recipeModel.getAllRecipeByUser(id).then((result) => {
         if (result.rowCount > 0) {
           success(res, result.rows, 'succses', 'succsess display all recipe by user!')
