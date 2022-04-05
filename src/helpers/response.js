@@ -18,10 +18,11 @@ module.exports = {
       })
     }
   },
-  failed: (res, data, status, message) => {
+  failed: (res, error, status, message) => {
     res.json({
       code: 500,
       status,
+      error,
       data: null,
       message
     })
