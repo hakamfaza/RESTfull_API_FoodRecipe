@@ -86,10 +86,15 @@ const userController = {
   },
   delUser: async (req, res) => {
     try {
-      const id = req.params.id
+      const id = req.APP_DATA.decode.id
+      const check = await userModel.detailUser(id)
+
+      const image = check.rows[0].image
+
+      deleteFile(`./public/${image}`)
       userModel.deleteUser(id).then((result) => {
         if (result.rowCount > 0) {
-          success(res, result.row[0], 'Succsess', 'Delete has been successful!')
+          success(res, result, 'Succsess', 'Delete has been successful!')
         } else {
           failed(res, null, 'Failed', 'Data not found!')
         }
