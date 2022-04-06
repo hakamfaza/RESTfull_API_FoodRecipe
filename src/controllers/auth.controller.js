@@ -13,28 +13,35 @@ module.exports = {
         email: req.body.email,
         password: req.body.password
       }
+
       const isEmail = validator.validate(setData.email)
       if (!isEmail) {
-        failed(res, null, 'failed', 'wrong email format')
+        failed(res, Error, 'failed', 'wrong email forma!')
         return
       }
+
       userModel
         .loginUser(setData)
         .then((result) => {
           // rowCount is number of data
           if (result.rowCount > 0) {
-            // Compare password from body
-            bcrypt.compare(setData.password, result.rows[0].password)
-              .then(async (match) => {
-                if (match) {
+            // Check isActive user
+            if (result.rows[0].is_active > 0) {
+              // Compare password from body
+              bcrypt.compare(setData.password, result.rows[0].password)
+                .then(async (match) => {
+                  if (match) {
                   // Token
-                  const token = await jwtToken(result.rows[0])
-                  successWithtoken(res, token, '12312', 'succsess', 'Login succsess!')
-                } else {
+                    const token = await jwtToken(result.rows[0])
+                    successWithtoken(res, token, '12312', 'succsess', 'Login succsess!')
+                  } else {
                   // When password is wrong
-                  failed(res, null, 'failed', 'Email or password is wrong!')
-                }
-              })
+                    failed(res, null, 'failed', 'Email or password is wrong!')
+                  }
+                })
+            } else {
+              failed(res, Error, 'failed', 'the user is being blocked, please contact the admin!')
+            }
           } else {
             // When username is wrong
             failed(res, null, 'failed', 'Email or password is wrong!')
@@ -43,6 +50,7 @@ module.exports = {
           failed(res, err, 'Failed', 'Failed login')
         })
     } catch (err) {
+      console.log(err)
       failed(res, err, 'Failed', 'Internal server Error')
     }
   },
