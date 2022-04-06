@@ -65,6 +65,7 @@ module.exports = {
         level: req.body.level ? 0 : 1,
         isActive: 1
       }
+      console.log(setData.image)
 
       // Validation
       if (setData.name === '' || setData.email === '' || setData.phone === '' || setData.password === '') {

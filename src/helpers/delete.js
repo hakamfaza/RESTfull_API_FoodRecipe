@@ -13,7 +13,7 @@ const deleteFile = async (filePath) => {
       })
     })
   } catch (err) {
-    throw new Error(err.message)
+    console.log(err)
   }
 }
 
