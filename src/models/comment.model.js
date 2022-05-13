@@ -3,7 +3,7 @@ const db = require('../config/db')
 const commentModel = {
   insertComment: (setData) => {
     return new Promise((resolve, reject) => {
-      db.query('INSERT INTO comment (recipe_id, comment_text, user_id) VALUES ($1, $2, $3)', [setData.recipeID, setData.commentText, setData.userID], (err, result) => {
+      db.query('INSERT INTO comment (id, recipe_id, comment, user_id, date) VALUES ($1, $2, $3, $4, $5)', [setData.id, setData.recipeID, setData.commentText, setData.userID, setData.date], (err, result) => {
         if (err) {
           reject(err)
         }
@@ -42,9 +42,9 @@ const commentModel = {
       })
     })
   },
-  editComment: (id, setData) => {
+  editComment: (setData) => {
     return new Promise((resolve, reject) => {
-      db.query('UPDATE comment SET recipe_id=$2, comment_text=$3, user_id=$4 WHERE id=$1 AND user_id=$5', [id, setData.recipeID, setData.commentText, setData.userID, setData.userID], (err, result) => {
+      db.query('UPDATE comment SET comment=$1 WHERE id=$2 AND recipe_id=$3 AND user_id=$4', [setData.comment, setData.idComment, setData.recipeID, setData.userID], (err, result) => {
         if (err) {
           reject(err)
         }

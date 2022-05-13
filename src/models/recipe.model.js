@@ -3,7 +3,7 @@ const db = require('../config/db')
 const recipeModel = {
   insertRecipe: (setData) => {
     return new Promise((resolve, reject) => {
-      db.query('INSERT INTO recipe (image, title, ingredients, vidio, date, user_id, is_active) VALUES ($1, $2, $3, $4, $5, $6, $7)', [setData.image, setData.title, setData.ingredients, setData.vidio, setData.date, setData.userID, setData.isActive], (err, result) => {
+      db.query('INSERT INTO recipe (id, image, title, ingredients, vidio, date, user_id, is_active) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [setData.id, setData.image, setData.title, setData.ingredients, setData.vidio, setData.date, setData.userID, setData.isActive], (err, result) => {
         if (err) {
           reject(err)
         }

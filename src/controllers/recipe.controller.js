@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid')
 const recipeModel = require('../models/recipe.model')
 const { success, failed } = require('../helpers/response')
 const deleteFile = require('../helpers/delete')
@@ -5,13 +6,14 @@ const deleteFile = require('../helpers/delete')
 const recipeController = {
   createRecipe: async (req, res) => {
     try {
-      // console.log(req.file.filename[0])
+      const id = uuidv4()
       const setData = {
+        id,
         image: req.file.filename,
         title: req.body.title,
         ingredients: req.body.ingredients,
         vidio: req.body.vidio,
-        date: req.body.date,
+        date: new Date(),
         userID: req.APP_DATA.decode.id,
         isActive: 1
       }

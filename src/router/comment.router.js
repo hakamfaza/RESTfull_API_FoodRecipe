@@ -7,7 +7,7 @@ const { isCostumer, isAdmin } = require('../middleware/authorization')
 const router = express.Router()
 
 router
-  .post('/comment', jwtAuth, isCostumer, createComment)
+  .post('/comment/:id', jwtAuth, isCostumer, createComment)
   .get('/comment', jwtAuth, isAdmin, getComment)
   .get('/comment/:id', jwtAuth, isAdmin, getDetailComment)
   .put('/comment/:id', jwtAuth, isCostumer, editComment)

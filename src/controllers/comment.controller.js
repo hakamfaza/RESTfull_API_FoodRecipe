@@ -1,15 +1,19 @@
+const { v4: uuidv4 } = require('uuid')
 const { success, failed } = require('../helpers/response')
 const commentModel = require('../models/comment.model')
 
 const commentController = {
   createComment: async (req, res) => {
     try {
+      const id = uuidv4()
+      const recipeId = req.params.id
       const setData = {
-        recipeID: req.body.recipe_id,
+        id,
+        recipeID: recipeId,
         commentText: req.body.comment_text,
-        userID: req.APP_DATA.decode.id
+        userID: req.APP_DATA.decode.id,
+        date: new Date()
       }
-      console.log(setData.userID)
       // Validation
       if (setData.recipeID === '' || setData.commentText === '' || setData.userID === '') {
         failed(res, null, 'Failed', 'All important data must be filled!')
@@ -70,16 +74,18 @@ const commentController = {
     try {
       const id = req.params.id
       const setData = {
-        recipeID: req.body.recipe_id,
-        commentText: req.body.comment_text,
+        recipeID: id,
+        idComment: req.body.idComment,
+        comment: req.body.comment,
         userID: req.APP_DATA.decode.id
       }
+
       // Validation
       if (setData.recipeID === '' || setData.commentText === '' || setData.userID === '') {
         failed(res, null, 'Failed', 'All data must be filled!')
         return
       }
-      commentModel.editComment(id, setData).then((result) => {
+      commentModel.editComment(setData).then((result) => {
         if (result.rowCount > 0) {
           success(res, result, 'Succsess', 'Succsess update comment!')
         } else {

@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid')
 const validator = require('email-validator')
 const bcrypt = require('bcrypt')
 const salt = 10
@@ -56,7 +57,9 @@ module.exports = {
   },
   createUser: async (req, res) => {
     try {
+      const id = uuidv4()
       const setData = {
+        id,
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
@@ -65,7 +68,6 @@ module.exports = {
         level: req.body.level ? 0 : 1,
         isActive: 1
       }
-      console.log(setData.image)
 
       // Validation
       if (setData.name === '' || setData.email === '' || setData.phone === '' || setData.password === '') {
