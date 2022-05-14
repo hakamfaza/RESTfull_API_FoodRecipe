@@ -22,6 +22,16 @@ const userModel = {
       })
     })
   },
+  getUserByEmail: (email) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM users WHERE email=$1', [email], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
   detailUser: (id) => {
     return new Promise((resolve, reject) => {
       db.query('SELECT * FROM users WHERE id=$1', [id], (err, result) => {

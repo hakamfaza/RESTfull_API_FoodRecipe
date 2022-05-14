@@ -1,11 +1,13 @@
 const express = require('express')
-const { createUser, login } = require('../controllers/auth.controller')
+const { login, register, activation } = require('../controllers/auth.controller')
+const { isVerify } = require('../middleware/authorization')
 const upload = require('../middleware/upload')
 
 const router = express.Router()
 
 router
-  .post('/register', upload, createUser)
-  .post('/login', login)
+  .post('/register', upload, register)
+  .get('/activation/:token', isVerify, activation)
+  .post('/login', isVerify, login)
 
 module.exports = router

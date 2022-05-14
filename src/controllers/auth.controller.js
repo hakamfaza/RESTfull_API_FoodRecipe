@@ -1,11 +1,16 @@
+const crypto = require('crypto')
 const { v4: uuidv4 } = require('uuid')
 const validator = require('email-validator')
 const bcrypt = require('bcrypt')
 const salt = 10
 
-const userModel = require('../models/auth.model')
+const authModel = require('../models/auth.model')
+const userModel = require('../models/users.model')
+const activateAccount = require('../helpers/email/activateAccountEmail')
+const sendEmail = require('../helpers/email/sendEmail')
 const { success, failed, successWithtoken } = require('../helpers/response')
 const jwtToken = require('../helpers/generateJwtToken')
+const { APP_NAME, EMAIL_FROM, API_URL } = require('../helpers/env')
 
 module.exports = {
   login: async (req, res) => {
@@ -21,7 +26,7 @@ module.exports = {
         return
       }
 
-      userModel
+      authModel
         .loginUser(setData)
         .then((result) => {
           // rowCount is number of data
@@ -51,13 +56,56 @@ module.exports = {
           failed(res, err, 'Failed', 'Failed login')
         })
     } catch (err) {
-      console.log(err)
       failed(res, err, 'Failed', 'Internal server Error')
     }
   },
-  createUser: async (req, res) => {
+  activation: async (req, res) => {
     try {
+      const { token } = req.params
+      const user = await authModel.checkEmailToken(token)
+
+      if (!user.rowCount) {
+        res.send(`
+          <div>
+            <h1>Activation Failed!</h1>
+            <h3>Token invalid!</h3>
+          </div>`
+        )
+      }
+
+      await authModel.activation(user.rows[0].id)
+      await authModel.updateToken(user.rows[0].id, '')
+
+      res.send(`
+        <div>
+          <h1>Activation success!</h1>
+          <h3>You can login now!</h3>
+      </div>
+      `)
+    } catch (error) {
+      res.send(`
+        <div>
+          <h1>Internal server Error!</h1>
+          <h3>${error.message}</h3>
+        </div>
+      `)
+    }
+  },
+  register: async (req, res) => {
+    try {
+      // Validation
+      if (!req.body.email || !req.body.name || !req.body.password) {
+        throw Error('all important data must be filled!')
+      }
+
+      const user = await userModel.getUserByEmail(req.body.email)
+      if (user.rowCount) {
+        failed(res, null, 'failed', 'Email already exist')
+        return
+      }
+
       const id = uuidv4()
+      const token = crypto.randomBytes(30).toString('hex')
       const setData = {
         id,
         name: req.body.name,
@@ -68,14 +116,20 @@ module.exports = {
         level: req.body.level ? 0 : 1,
         isActive: 1
       }
+      await authModel.register(setData)
 
-      // Validation
-      if (setData.name === '' || setData.email === '' || setData.phone === '' || setData.password === '') {
-        failed(res, null, 'Failed', 'All important data must be filled!')
-        return
+      await authModel.updateToken(setData.id, token)
+
+      // send email
+      const templateEmail = {
+        from: `${APP_NAME} <${EMAIL_FROM}>`,
+        to: req.body.email.toLowerCase(),
+        subject: 'Activate Your Account!',
+        html: activateAccount(`${API_URL}/activation/${token}`)
       }
-      const result = await userModel.createUser(setData)
-      success(res, result, 'sucsess', 'Create user succsess!')
+
+      sendEmail(templateEmail)
+      success(res, null, 'sucsess', 'Register succsess!')
     } catch (err) {
       failed(res, err, 'Failed', 'Failed crete user')
     }

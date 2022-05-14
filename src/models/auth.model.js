@@ -1,9 +1,39 @@
 const db = require('../config/db')
 
 const authModel = {
-  createUser: (setData) => {
+  register: (setData) => {
     return new Promise((resolve, reject) => {
       db.query('INSERT INTO users (id, name, email, phone, password, image, level, is_active) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [setData.id, setData.name, setData.email, setData.phone, setData.password, setData.image, setData.level, setData.isActive], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
+  updateToken: (id, token) => {
+    return new Promise((resolve, reject) => {
+      db.query('UPDATE users SET token=$2 WHERE id=$1', [id, token], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
+  checkEmailToken: (token) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM users WHERE token=$1', [token], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
+  },
+  activation: (id) => {
+    return new Promise((resolve, reject) => {
+      db.query('UPDATE users SET is_verified=true WHERE id=$1', [id], (err, result) => {
         if (err) {
           reject(err)
         }
