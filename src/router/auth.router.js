@@ -1,5 +1,5 @@
 const express = require('express')
-const { login, register, activation } = require('../controllers/auth.controller')
+const { login, register, activation, forgot, reset } = require('../controllers/auth.controller')
 const { isVerify } = require('../middleware/authorization')
 const upload = require('../middleware/upload')
 
@@ -9,5 +9,7 @@ router
   .post('/register', upload, register)
   .get('/activation/:token', isVerify, activation)
   .post('/login', isVerify, login)
+  .put('/forgot', isVerify, forgot)
+  .put('/reset/:token', isVerify, reset)
 
 module.exports = router

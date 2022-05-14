@@ -7,10 +7,11 @@ const salt = 10
 const authModel = require('../models/auth.model')
 const userModel = require('../models/users.model')
 const activateAccount = require('../helpers/email/activateAccountEmail')
+const resetPassword = require('../helpers/email/resetPassword')
 const sendEmail = require('../helpers/email/sendEmail')
 const { success, failed, successWithtoken } = require('../helpers/response')
 const jwtToken = require('../helpers/generateJwtToken')
-const { APP_NAME, EMAIL_FROM, API_URL } = require('../helpers/env')
+const { APP_NAME, EMAIL_FROM, API_URL, CLIENT_URL } = require('../helpers/env')
 
 module.exports = {
   login: async (req, res) => {
@@ -132,6 +133,48 @@ module.exports = {
       success(res, null, 'sucsess', 'Register succsess!')
     } catch (err) {
       failed(res, err, 'Failed', 'Failed crete user')
+    }
+  },
+  forgot: async (req, res) => {
+    try {
+      const user = await userModel.getUserByEmail(req.body.email)
+      if (user.rowCount) {
+        const token = crypto.randomBytes(30).toString('hex')
+
+        // update email token
+        await authModel.updateToken(user.rows[0].id, token)
+
+        // send email
+        const templateEmail = {
+          from: `${APP_NAME} <${EMAIL_FROM}>`,
+          to: req.body.email.toLowerCase(),
+          subject: 'Reset Your Password!',
+          html: resetPassword(`${CLIENT_URL}/reset/${token}`)
+        }
+        sendEmail(templateEmail)
+      }
+
+      success(res, null, 'sucess', 'success forgot password!')
+    } catch (error) {
+      failed(res, error.message, 'failed', 'internal server error!')
+    }
+  },
+  reset: async (req, res) => {
+    try {
+      const { token } = req.params
+      const user = await authModel.checkEmailToken(token)
+
+      if (!user.rowCount) {
+        failed(res, null, 'failed', 'reset password failed!')
+      }
+
+      const password = await bcrypt.hash(req.body.password, salt)
+      await authModel.resetPassword(user.rows[0].id, password)
+      await authModel.updateToken(user.rows[0].id, '')
+
+      success(res, null, 'success', 'sucess create new password!')
+    } catch (error) {
+      failed(res, error.message, 'failed', 'internal server error!')
     }
   }
 }

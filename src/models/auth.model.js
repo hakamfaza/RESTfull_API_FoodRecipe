@@ -50,6 +50,16 @@ const authModel = {
         resolve(result)
       })
     })
+  },
+  resetPassword: (id, password) => {
+    return new Promise((resolve, reject) => {
+      db.query('UPDATE users SET password=$1 WHERE id=$2', [password, id], (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+    })
   }
 }
 
