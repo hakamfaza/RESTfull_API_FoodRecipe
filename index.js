@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 const helmet = require('helmet')
 const xssClean = require('xss-clean')
 
@@ -13,11 +13,16 @@ const authRouter = require('./src/router/auth.router')
 const { SERVER_HOST, SERVER_PORT } = require('./src/helpers/env')
 
 const app = express()
-app.use(xssClean())
-app.use(helmet())
-app.use(bodyParser.json())
 
+app.use(express.json())
+app.use(helmet({
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: false
+}))
+app.use(xssClean())
+// app.use(bodyParser.json())
 app.use(cors())
+app.use(express.static('public'))
 
 const data = () => {
   try {
@@ -35,5 +40,5 @@ dotenv.config()
 const host = SERVER_HOST
 const port = SERVER_PORT
 app.listen(port, host, () => {
-  console.log(`Server running at http://${host}:${port}/`)
+  console.log(`Server running at http://${host}:${port}`)
 })

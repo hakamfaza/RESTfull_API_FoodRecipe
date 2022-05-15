@@ -32,7 +32,7 @@ const recipeController = {
   getRecipe: async (req, res) => {
     try {
       const { search, sortField, sortType, page, limit } = req.query
-      const isActive = req.APP_DATA.tokenDecoded.level
+      const isActive = 1
 
       const getSearch = search || ''
       const sortByField = sortField || 'id'
@@ -56,7 +56,7 @@ const recipeController = {
         // res.json(result.rows)
       })
     } catch (err) {
-      failed(res, err, 'Failed', 'Failed to display recipe!')
+      failed(res, err.message, 'Failed', 'Failed to display recipe!')
     }
   },
   getRecipeDetail: async (req, res) => {

@@ -10,7 +10,7 @@ const router = express.Router()
 
 router
   .post('/recipe', jwtAuth, isCostumer, upload, createRecipe)
-  .get('/recipe', jwtAuth, getRecipe)
+  .get('/recipe', getRecipe)
   .get('/recipe/:id', jwtAuth, getRecipeDetail)
   .put('/recipe/:id', jwtAuth, isCostumer, upload, putRecipe)
   .delete('/recipe/:id', jwtAuth, isCostumer, delRecipe)
