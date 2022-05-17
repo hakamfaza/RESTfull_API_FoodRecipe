@@ -40,7 +40,10 @@ module.exports = {
                   if (match) {
                   // Token
                     const token = await jwtToken(result.rows[0])
-                    successWithtoken(res, token, '12312', 'succsess', 'Login succsess!')
+                    successWithtoken(res, {
+                      token,
+                      id: result.rows[0].id
+                    }, 200, 'succsess', 'Login succsess!')
                   } else {
                   // When password is wrong
                     failed(res, null, 'failed', 'Email or password is wrong!')

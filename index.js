@@ -15,10 +15,13 @@ const { SERVER_HOST, SERVER_PORT } = require('./src/helpers/env')
 const app = express()
 
 app.use(express.json())
-app.use(helmet({
-  crossOriginEmbedderPolicy: false,
-  crossOriginResourcePolicy: false
-}))
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: false
+  })
+)
+
 app.use(xssClean())
 // app.use(bodyParser.json())
 app.use(cors())
