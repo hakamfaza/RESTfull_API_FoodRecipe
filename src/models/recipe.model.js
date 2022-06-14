@@ -64,7 +64,7 @@ const recipeModel = {
   },
   getAllRecipeByUser: (id) => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM recipe INNER JOIN users ON user_id=users.id WHERE users.id=$1', [id], (err, result) => {
+      db.query('SELECT * FROM recipe WHERE user_id=$1', [id], (err, result) => {
         if (err) {
           reject(err)
         }
