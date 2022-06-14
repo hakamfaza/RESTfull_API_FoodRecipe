@@ -23,8 +23,9 @@ const recipeModel = {
     })
   },
   getRecipe: (getSearch, sortByField, sortByType, getLimitValue, getOffsetValue, isActive) => {
+    // update is active
     return new Promise((resolve, reject) => {
-      db.query(`SELECT * FROM recipe WHERE title ILIKE '%${getSearch}%' AND is_active = 1 OR is_active = ${isActive} ORDER BY ${sortByField} ${sortByType} LIMIT ${getLimitValue} OFFSET ${getOffsetValue}`, (err, result) => {
+      db.query(`SELECT * FROM recipe WHERE title ILIKE '%${getSearch}%' AND is_active = 1 ORDER BY ${sortByField} ${sortByType} LIMIT ${getLimitValue} OFFSET ${getOffsetValue}`, (err, result) => {
         if (err) {
           reject(err)
         }
