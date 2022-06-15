@@ -50,12 +50,87 @@ Express.js is one of the most popular web frameworks for Node.js. The complete d
 Open **.env** file on code editor and copy the code below :
 
 ```
-DB_HOST = ''
-DB_USER = ''
-DB_PASSWORD = ''
-DB_DATABASE = ''
-DB_PORT = 
+# app
+APP_NAME = [APP_NAME]
+NODE_ENV = [NODE_ENV]
+PORT = [APPLICATION_PORT]
+API_URL = [BACKEND_URL]
+APP_CLIENT = [FRONTEND_URL]
 
-SERVER_HOST = 
-SERVER_PORT = 
+# database
+DB_HOST = [DB_HOST]
+DB_USER = [DB_USER]
+DB_PASSWORD = [DB_PASSWORD]
+DB_NAME = [DB_NAME]
+DB_PORT = [DB_PORT]
+DB_DIALECT = [DB_DIALECT]
+
+# jwt
+JWT_SECRET = [JWT_SECRET]
+JWT_EXPIRED = [JWT_EXPIRED]
+
+# google
+EMAIL_FROM = [EMAIL_FROM]
+EMAIL_USER = [EMAIL_USER]
+GOOGLE_CLIENT_ID = [GOOGLE_CLIENT_ID]
+GOOGLE_CLIENT_SECRET = [GOOGLE_CLIENT_SECRET]
+REDIRECT_URI = [REDIRECT_URI]
+GMAIL_REFRESH_TOKEN = [GMAIL_REFRESH_TOKEN]
+
 ```
+
+
+## API Reference
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of item to fetch |
+
+
+#### Get all user
+
+```http
+  GET /user
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `search` | `string` | **Required**. Your API key |
+| `limit` | `number` | **Required**. Your API key |
+| `sortType` | `string` | **Required**. Your API key |
+| `page` | `number` | **Required**. Your API key |
+
+#### Get all recipe
+
+```http
+  GET /recipe
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `search` | `string` | **Required**. Your API key |
+| `limit` | `number` | **Required**. Your API key |
+| `sortType` | `string` | **Required**. Your API key |
+| `page` | `number` | **Required**. Your API key |
+| `sortField` | `string` | **Required**. Your API key |
+
+#### Get all comment
+
+```http
+  GET /comment
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `limit` | `number` | **Required**. Your API key |
+| `sortType` | `string` | **Required**. Your API key |
+| `page` | `number` | **Required**. Your API key |
+| `sortField` | `string` | **Required**. Your API key |
+
+##### Link Front End
+* https://github.com/hakamfaza/recipefood-webapp-v2
+* https://recipefood-webapp-v2.vercel.app/
+
+## Authors
+
+- [@hakamfaza](https://github.com/hakamfaza)
