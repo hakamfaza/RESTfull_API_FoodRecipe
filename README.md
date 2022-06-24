@@ -127,9 +127,8 @@ GMAIL_REFRESH_TOKEN = [GMAIL_REFRESH_TOKEN]
 | `page` | `number` | **Required**. Your API key |
 | `sortField` | `string` | **Required**. Your API key |
 
-##### Link Front End
-* https://github.com/hakamfaza/recipefood-webapp-v2
-* https://recipefood-webapp-v2.vercel.app/
+## Front End
+https://github.com/hakamfaza/recipefood-webapp-v2
 
 ## Authors
 
